@@ -20,6 +20,19 @@ jobs:
         with:
           node-version: 22
           cache: npm
+      - name: Check FTP secrets
+        env:
+          S1: ${{ secrets.FTP_SERVER }}
+          S2: ${{ secrets.FTP_USERNAME }}
+          S3: ${{ secrets.FTP_PASSWORD }}
+          S4: ${{ secrets.FTP_DIR }}
+          V1: ${{ vars.FTP_SERVER }}
+        run: |
+          for n in S1:FTP_SERVER S2:FTP_USERNAME S3:FTP_PASSWORD S4:FTP_DIR; do
+            k=${n%%:*}; name=${n#*:}
+            if [ -n "${!k}" ]; then echo "$name: set"; else echo "$name: MISSING"; fi
+          done
+          if [ -n "$V1" ]; then echo "FTP_SERVER found in Variables (should be in Secrets)"; fi
       - run: npm ci
       - run: npm run build
       - name: Upload to hosting via FTP
