@@ -1,0 +1,17 @@
+---
+import site from '../data/site.json';
+---
+<section id="pakety" aria-labelledby="pakety-h">
+  <div class="head"><h2 id="pakety-h">Пакеты и цены</h2><p>Цена фиксируется в договоре до старта. Без почасовой оплаты и доплат «за правки».</p></div>
+  <div class="packages">
+    {site.packages.map((p) => (
+      <article class:list={['pkg', { main: p.featured }]}>
+        <div class="label">{p.label}</div>
+        <h3>{p.title}</h3>
+        <div class="price">{p.price} <small>₽</small></div>
+        <ul>{p.items.map((i) => <li>{i}</li>)}</ul>
+        <div class="term">Срок: {p.term}</div>
+      </article>
+    ))}
+  </div>
+</section>

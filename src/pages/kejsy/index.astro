@@ -1,0 +1,21 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="Кейсы: фирменный стиль, логотипы, носители | Тиунов / студия" description="Проекты студии: логотипы, фирменные стили, оформление транспорта, мерч и сайты.">
+<div class="wrap">
+  <section>
+    <div class="head"><h1>Кейсы</h1></div>
+    <div class="cases">
+      {cases.map((c) => (
+        <a class="case" href={`/kejsy/${c.id}/`} style="color:inherit;text-decoration:none">
+          <div class="tag">{c.data.tags.map((t) => <span>{t}</span>)}</div>
+          <h3>{c.data.client}</h3>
+          <p>{c.data.summary}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</div>
+</Base>

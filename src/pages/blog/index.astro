@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const fmt = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<Base title="Блог о брендинге и сайтах | Тиунов / студия" description="Статьи о фирменном стиле, сайтах и рекламе для бизнеса: цены, сроки, как выбрать подрядчика.">
+<div class="wrap">
+  <section>
+    <div class="head"><h1>Блог</h1></div>
+    {posts.length === 0 && <p>Скоро здесь появятся статьи.</p>}
+    <div class="list">
+      {posts.map((p) => (
+        <a href={`/blog/${p.id}/`}>
+          <div class="label">{fmt.format(p.data.date)}</div>
+          <h3>{p.data.title}</h3>
+          <p style="color:var(--muted)">{p.data.description}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+</div>
+</Base>

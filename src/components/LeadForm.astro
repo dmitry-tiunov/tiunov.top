@@ -1,0 +1,46 @@
+---
+import site from '../data/site.json';
+---
+<section id="zayavka" aria-labelledby="zayavka-h" style="padding-bottom:40px">
+  <div class="lead-form">
+    <div class="label">Бесплатно · ответ за 1 рабочий день</div>
+    <h2 id="zayavka-h" style="margin-top:12px">Аудит вашего бренда и сайта</h2>
+    <p style="margin-top:12px;opacity:.8">Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
+    <form id="lead" data-endpoint={site.formEndpoint} novalidate>
+      <label>Имя<input id="f-name" name="name" required autocomplete="name"></label>
+      <label>Телефон или Telegram<input id="f-contact" name="contact" required></label>
+      <label>Компания и сайт<input id="f-site" name="site" placeholder="company.ru"></label>
+      <label>Что нужно<select id="f-pkg" name="pkg"><option>Пока не знаю, нужен аудит</option>{site.packages.map((p) => <option>{p.title}</option>)}</select></label>
+      <label class="full">Комментарий<textarea id="f-msg" name="msg" placeholder="Например: старому логотипу 15 лет, весной выставка"></textarea></label>
+      <p class="full consent">Нажимая кнопку, вы соглашаетесь на <a href="/privacy/" style="color:inherit">обработку персональных данных</a>.</p>
+      <div class="full" style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <button class="btn primary" type="submit">Отправить заявку</button>
+        <span id="form-msg" role="status"></span>
+      </div>
+    </form>
+  </div>
+</section>
+<script>
+  const form = document.getElementById('lead') as HTMLFormElement;
+  const msg = document.getElementById('form-msg')!;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    if (!String(data.get('name')).trim() || !String(data.get('contact')).trim()) {
+      msg.textContent = 'Укажите имя и телефон или Telegram.';
+      return;
+    }
+    const endpoint = form.dataset.endpoint;
+    if (!endpoint) { msg.textContent = 'Форма ещё не подключена. Напишите в Telegram.'; return; }
+    msg.textContent = 'Отправляем…';
+    try {
+      const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error();
+      form.reset();
+      msg.textContent = 'Заявка отправлена. Ответим в течение рабочего дня.';
+      (window as any).ym?.(0, 'reachGoal', 'lead');
+    } catch {
+      msg.textContent = 'Не получилось отправить. Напишите в Telegram или позвоните.';
+    }
+  });
+</script>

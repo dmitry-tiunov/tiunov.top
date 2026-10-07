@@ -1,0 +1,76 @@
+backend:
+  name: github
+  repo: dmitry-tiunov/tiunov.top
+  branch: main
+
+locale: ru
+media_folder: public/images
+public_folder: /images
+
+collections:
+  - name: blog
+    label: Блог
+    label_singular: Статья
+    folder: src/content/blog
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: "Заголовок (title)", widget: string }
+      - { name: description, label: "Описание для поиска", widget: text }
+      - { name: date, label: Дата, widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - { name: draft, label: Черновик, widget: boolean, default: true }
+      - { name: body, label: Текст, widget: markdown }
+
+  - name: cases
+    label: Кейсы
+    label_singular: Кейс
+    folder: src/content/cases
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: client, label: Клиент, widget: string }
+      - { name: title, label: "Заголовок (title)", widget: string }
+      - { name: description, label: "Описание для поиска", widget: text }
+      - { name: summary, label: "Коротко для карточки", widget: text }
+      - { name: tags, label: Теги, widget: list }
+      - { name: order, label: "Порядок на главной", widget: number, default: 100 }
+      - { name: draft, label: Черновик, widget: boolean, default: false }
+      - { name: body, label: Текст, widget: markdown }
+
+  - name: cities
+    label: Города
+    label_singular: Город
+    folder: src/content/cities
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: city, label: Город, widget: string }
+      - { name: cityIn, label: "Город в падеже («в Москве»)", widget: string }
+      - { name: title, label: "Заголовок (title)", widget: string }
+      - { name: description, label: "Описание для поиска", widget: text }
+      - { name: draft, label: Черновик, widget: boolean, default: true }
+      - { name: body, label: "Уникальный текст страницы", widget: markdown }
+
+  - name: settings
+    label: Настройки
+    files:
+      - name: site
+        label: Контакты и пакеты
+        file: src/data/site.json
+        fields:
+          - { name: name, label: Название студии, widget: string }
+          - { name: city, label: Город, widget: string }
+          - { name: phone, label: Телефон, widget: string }
+          - { name: telegram, label: "Telegram (без @)", widget: string }
+          - { name: email, label: Почта, widget: string }
+          - { name: formEndpoint, label: "Адрес отправки формы", widget: string, required: false }
+          - name: packages
+            label: Пакеты
+            widget: list
+            fields:
+              - { name: label, label: Метка, widget: string }
+              - { name: title, label: Название, widget: string }
+              - { name: price, label: "Цена (например «от 45 000»)", widget: string }
+              - { name: term, label: Срок, widget: string }
+              - { name: featured, label: Выделить, widget: boolean, default: false }
+              - { name: items, label: Состав, widget: list }

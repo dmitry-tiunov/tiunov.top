@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import Packages from '../../components/Packages.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths() {
+  const items = await getCollection('cities', ({ data }) => !data.draft);
+  return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+<Base title={entry.data.title} description={entry.data.description}>
+<div class="wrap">
+  <article class="prose" style="padding-block:40px">
+    <div class="label">{entry.data.city}</div>
+    <h1 style="margin-top:12px">Фирменный стиль и сайты {entry.data.cityIn}</h1>
+    <Content />
+  </article>
+  <Packages />
+  <LeadForm />
+</div>
+</Base>

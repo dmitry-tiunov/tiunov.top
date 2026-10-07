@@ -1,0 +1,14 @@
+{
+  "name": "tiunov-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.14.0",
+    "@astrojs/sitemap": "^3.6.0"
+  }
+}

@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import { getCollection, render } from 'astro:content';
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const fmt = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+const jsonld = { '@context': 'https://schema.org', '@type': 'BlogPosting', headline: entry.data.title, description: entry.data.description, datePublished: entry.data.date.toISOString(), inLanguage: 'ru' };
+---
+<Base title={entry.data.title} description={entry.data.description} jsonld={jsonld}>
+<div class="wrap">
+  <div class="crumbs label"><a href="/blog/">Блог</a> / {fmt.format(entry.data.date)}</div>
+  <article class="prose" style="padding-block:32px">
+    <h1>{entry.data.title}</h1>
+    <Content />
+  </article>
+  <LeadForm />
+</div>
+</Base>
