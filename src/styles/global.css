@@ -82,10 +82,10 @@ header.top .btn{justify-self:end}
 /* Логотипы клиентов */
 .logos{margin-top:72px;text-align:center}
 .marquee{overflow:hidden;margin-top:28px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent);mask-image:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent)}
-.marquee .track{display:flex;gap:72px;width:max-content;align-items:center;animation:marquee 40s linear infinite}
+.marquee .track{display:flex;gap:72px;padding-right:72px;width:max-content;align-items:center;animation:marquee 32s linear infinite;will-change:transform;backface-visibility:hidden}
 .marquee img{height:30px;width:auto;opacity:.55;transition:opacity .2s}
 .marquee img:hover{opacity:1}
-@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes marquee{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
 
 /* Секции */
 section{padding-block:var(--section) 0}
@@ -263,7 +263,7 @@ footer.site .legal{display:flex;justify-content:space-between;gap:16px;flex-wrap
   .steps{grid-template-columns:1fr 1fr}
   form{grid-template-columns:1fr}
   .lead-form{padding:28px}
-  .marquee .track{gap:48px}
+  .marquee .track{gap:44px;padding-right:44px;animation-duration:16s}
   .marquee img{height:24px}
   .masonry{columns:2}
   .masonry figure:nth-child(n+7){display:none}

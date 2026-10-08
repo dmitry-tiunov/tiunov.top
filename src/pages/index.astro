@@ -36,7 +36,7 @@ const alt = (src: string) => src.split('/').pop()!.replace(/-\d+\.\w+$/, '');
       <div class="label">{home.logosTitle}</div>
       <div class="marquee">
         <div class="track">
-          {[...home.logos, ...home.logos].map((l, i) => <img src={l.image} alt={i < home.logos.length ? l.name : ''} loading="lazy" />)}
+          {[...home.logos, ...home.logos].map((l, i) => <img src={l.image} alt={i < home.logos.length ? l.name : ''} decoding="async" />)}
         </div>
       </div>
     </div>
