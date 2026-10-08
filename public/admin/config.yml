@@ -76,3 +76,70 @@ collections:
               - { name: term, label: Срок, widget: string }
               - { name: featured, label: Выделить, widget: boolean, default: false }
               - { name: items, label: Состав, widget: list }
+      - name: home
+        label: Главная страница
+        file: src/data/home.json
+        fields:
+          - { name: seoTitle, label: "Заголовок для поиска (title)", widget: string }
+          - { name: seoDescription, label: "Описание для поиска", widget: text }
+          - name: hero
+            label: Первый экран
+            widget: object
+            fields:
+              - { name: badgeTag, label: "Бейдж: метка", widget: string }
+              - { name: badgeText, label: "Бейдж: текст", widget: string }
+              - { name: title, label: Заголовок, widget: string }
+              - { name: lead, label: Подзаголовок, widget: text }
+              - { name: primary, label: "Белая кнопка", widget: string }
+              - { name: secondary, label: "Тёмная кнопка", widget: string }
+          - { name: reel, label: "Лента работ на первом экране (лучше 12–15 картинок)", widget: list, field: { name: image, label: Картинка, widget: image } }
+          - { name: logosTitle, label: "Заголовок над логотипами", widget: string }
+          - name: logos
+            label: "Логотипы клиентов (белые PNG на прозрачном фоне)"
+            widget: list
+            fields:
+              - { name: name, label: Название, widget: string }
+              - { name: image, label: Логотип, widget: image }
+          - name: services
+            label: Услуги
+            widget: object
+            fields:
+              - { name: pill, label: Метка, widget: string }
+              - { name: title, label: Заголовок, widget: string }
+              - { name: text, label: Подзаголовок, widget: text }
+              - name: items
+                label: Блоки услуг
+                widget: list
+                fields:
+                  - { name: label, label: Метка, widget: string }
+                  - { name: title, label: Заголовок, widget: string }
+                  - { name: text, label: Текст, widget: text }
+                  - { name: bullets, label: Пункты, widget: list, required: false }
+                  - { name: linkText, label: "Текст ссылки", widget: string, required: false }
+                  - { name: linkUrl, label: "Адрес ссылки", widget: string, required: false }
+                  - { name: images, label: "Картинки (1 или 2; для макета сайта 3)", widget: list, field: { name: image, label: Картинка, widget: image } }
+                  - { name: browser, label: "Показать как макет сайта", widget: boolean, default: false }
+                  - { name: browserTitle, label: "Заголовок в макете сайта", widget: string, required: false }
+          - { name: casesTitle, label: "Кейсы: заголовок", widget: string }
+          - { name: casesText, label: "Кейсы: подзаголовок", widget: text }
+          - { name: gallery, label: "Витрина работ под кейсами", widget: list, field: { name: image, label: Картинка, widget: image } }
+          - { name: stepsTitle, label: "Этапы: заголовок", widget: string }
+          - name: steps
+            label: Этапы
+            widget: list
+            fields:
+              - { name: title, label: Этап, widget: string }
+              - { name: text, label: Описание, widget: text }
+          - name: faq
+            label: Вопросы
+            widget: list
+            fields:
+              - { name: q, label: Вопрос, widget: string }
+              - { name: a, label: Ответ, widget: text }
+          - name: final
+            label: Финальный призыв
+            widget: object
+            fields:
+              - { name: title, label: Заголовок, widget: string }
+              - { name: text, label: Текст, widget: text }
+              - { name: chips, label: "Кнопки-подсказки", widget: list }

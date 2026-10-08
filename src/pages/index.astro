@@ -3,122 +3,80 @@ import Base from '../layouts/Base.astro';
 import Packages from '../components/Packages.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { getCollection } from 'astro:content';
+import home from '../data/home.json';
 
 const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
-
-const w = (n: string) => `/img/work/${n}.webp`;
-const reel = [
-  ['parma-1', 'rsb-2', 'premium-2', 'system5s-1', 'akademiya-5'],
-  ['akademiya-2', 'grafto-1', 'parma-3', 'rsb-4', 'premium-3'],
-  ['premium-1', 'parma-5', 'grafto-2', 'akademiya-4', 'rsb-5'],
-];
-const logos = [
-  ['akademiya', 'Академия Металла'], ['parma', 'Парма Тулз'], ['rsb', 'РСБ'], ['premium-ran', 'Премиум Ран'],
-  ['system5s', 'System 5S'], ['zhukov', 'Жуков'], ['goldfin', 'GoldFin'], ['temnye-nochi', 'Тёмные ночи'], ['xaka', 'Xaka'],
-];
-const more = [
-  ['system5s-1', 'System 5S'], ['grafto-1', 'Grafto'], ['akademiya-3', 'Академия Металла'], ['premium-6', 'Премиум Ран'],
-  ['system5s-3', 'System 5S'], ['parma-6', 'Парма Тулз'], ['grafto-4', 'Grafto'], ['rsb-3', 'РСБ'],
-  ['system5s-2', 'System 5S'], ['grafto-3', 'Grafto'], ['parma-2', 'Парма Тулз'], ['premium-5', 'Премиум Ран'],
-];
-const chips = ['Логотип', 'Фирменный стиль', 'Сайт', 'Оформление транспорта', 'Мерч и POS'];
+// Лента в герое: картинки раскладываются по трём колонкам
+const reel = [0, 1, 2].map((c) => home.reel.filter((_, i) => i % 3 === c));
+const alt = (src: string) => src.split('/').pop()!.replace(/-\d+\.\w+$/, '');
 ---
-<Base title="Фирменный стиль и сайты для бизнеса под ключ | Тиунов / студия" description="Логотип, фирменный стиль, брендбук, сайт и рекламные носители в одних руках. Пакеты с фиксированной ценой и сроком, от 45 000 ₽.">
+<Base title={home.seoTitle} description={home.seoDescription}>
 <main>
 <div class="wrap hero" id="top">
-  <a class="badge reveal" href="#zayavka"><b>Бесплатно</b> Аудит бренда и сайта за 1 день <i>→</i></a>
-  <h1 class="reveal">Бренд и сайт, которые продают</h1>
-  <p class="lead reveal">Логотип, фирменный стиль, сайт, транспорт, вывески и мерч в одних руках. Фиксированная цена и срок, один ответственный от брифа до печати.</p>
+  <a class="badge reveal" href="#zayavka"><b>{home.hero.badgeTag}</b> {home.hero.badgeText} <i>→</i></a>
+  <h1 class="reveal">{home.hero.title}</h1>
+  <p class="lead reveal">{home.hero.lead}</p>
   <div class="cta reveal">
-    <a class="btn primary" href="#zayavka">Обсудить проект</a>
-    <a class="btn ghost" href="#kejsy">Смотреть работы</a>
+    <a class="btn primary" href="#zayavka">{home.hero.primary}</a>
+    <a class="btn ghost" href="#kejsy">{home.hero.secondary}</a>
   </div>
   <div class="stage reveal" aria-label="Работы студии">
     <div class="reel">
       {reel.map((col) => (
         <div class="col">
-          {[...col, ...col].map((n, i) => (
-            <img src={w(n)} alt="" width="736" height="588" loading={i < 3 ? 'eager' : 'lazy'} decoding="async" />
+          {[...col, ...col].map((src, i) => (
+            <img src={src} alt="" width="736" height="588" loading={i < 3 ? 'eager' : 'lazy'} decoding="async" />
           ))}
         </div>
       ))}
     </div>
   </div>
-  <div class="logos reveal">
-    <div class="label">Бренды, которые мы создали</div>
-    <div class="marquee">
-      <div class="track">
-        {[...logos, ...logos].map(([f, n], i) => <img src={`/img/logos/${f}.png`} alt={i < logos.length ? n : ''} loading="lazy" />)}
+  {home.logos.length > 0 && (
+    <div class="logos reveal">
+      <div class="label">{home.logosTitle}</div>
+      <div class="marquee">
+        <div class="track">
+          {[...home.logos, ...home.logos].map((l, i) => <img src={l.image} alt={i < home.logos.length ? l.name : ''} loading="lazy" />)}
+        </div>
       </div>
     </div>
-  </div>
+  )}
 </div>
 
 <div class="wrap">
 <section id="uslugi" aria-labelledby="uslugi-h">
   <div class="intro reveal">
-    <span class="pill">Что делаем</span>
-    <h2 id="uslugi-h">Весь образ компании в одних руках</h2>
-    <p>От знака на визитке до самосвала на трассе. Один стиль, один ответственный, одна смета.</p>
+    <span class="pill">{home.services.pill}</span>
+    <h2 id="uslugi-h">{home.services.title}</h2>
+    <p>{home.services.text}</p>
   </div>
-
-  <div class="feature">
-    <div class="copy reveal">
-      <span class="label">Айдентика</span>
-      <h3 style="margin-top:12px">Логотип, который становится системой</h3>
-      <p>Знак, цвета, шрифты, графика и брендбук, по которому любой подрядчик соберёт новый носитель без вопросов.</p>
-      <ul><li>3 концепции на выбор</li><li>Брендбук до 30 страниц</li><li>Шаблоны документов и презентаций</li></ul>
-      <a class="link-arrow" href="/kejsy/parma-tulz/">Кейс Парма Тулз</a>
-    </div>
-    <div class="shot reveal"><img src={w('parma-1')} alt="Логотип Парма Тулз на строительном ограждении" width="736" height="588" loading="lazy" /></div>
-  </div>
-
-  <div class="feature">
-    <div class="copy reveal">
-      <span class="label">Сайты</span>
-      <h3 style="margin-top:12px">Сайт, который приводит заявки из поиска</h3>
-      <p>Лендинг, корпоративный сайт или каталог продукции в фирменном стиле. Собран под запросы ваших клиентов в Яндексе и открывается за секунду.</p>
-      <ul><li>Страницы под каждую услугу и продукт</li><li>Вебмастер, Метрика и цели</li><li>Админка, чтобы менять тексты самим</li></ul>
-      <a class="link-arrow" href="#pakety">Пакеты с сайтом</a>
-    </div>
-    <div class="shot reveal">
-      <div class="browser" aria-hidden="true">
-        <div class="chrome"><i></i><i></i><i></i><span>yourcompany.ru</span></div>
-        <div class="page">
-          <div class="bars"><span></span><span></span><span></span><span></span></div>
-          <b>Металлопрокат с доставкой за 24 часа</b>
-          <div class="row">
-            <div style={`background-image:url(${w('akademiya-4')})`}></div>
-            <div style={`background-image:url(${w('akademiya-2')})`}></div>
-            <div style={`background-image:url(${w('akademiya-5')})`}></div>
+  {home.services.items.map((f) => (
+    <div class="feature">
+      <div class="copy reveal">
+        <span class="label">{f.label}</span>
+        <h3 style="margin-top:12px">{f.title}</h3>
+        <p>{f.text}</p>
+        {f.bullets?.length > 0 && <ul>{f.bullets.map((b) => <li>{b}</li>)}</ul>}
+        {f.linkText && <a class="link-arrow" href={f.linkUrl}>{f.linkText}</a>}
+      </div>
+      {f.browser ? (
+        <div class="shot reveal">
+          <div class="browser" aria-hidden="true">
+            <div class="chrome"><i></i><i></i><i></i><span>yourcompany.ru</span></div>
+            <div class="page">
+              <div class="bars"><span></span><span></span><span></span><span></span></div>
+              <b>{f.browserTitle}</b>
+              <div class="row">{f.images.slice(0, 3).map((src) => <div style={`background-image:url(${src})`}></div>)}</div>
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <div class:list={['shot', 'reveal', { duo: f.images.length > 1 }]}>
+          {f.images.slice(0, 2).map((src) => <img src={src} alt={`${f.label}: ${alt(src)}`} loading="lazy" />)}
+        </div>
+      )}
     </div>
-  </div>
-
-  <div class="feature">
-    <div class="copy reveal">
-      <span class="label">Транспорт и наружка</span>
-      <h3 style="margin-top:12px">Бренд, который видно с трассы</h3>
-      <p>Оформление машин, вывески, билборды, таблички. Графику проверяем на реальных размерах и готовим файлы под конкретного подрядчика.</p>
-      <a class="link-arrow" href="/kejsy/rsb/">Кейс РСБ</a>
-    </div>
-    <div class="shot reveal"><img src={w('rsb-1')} alt="Оформление самосвала РСБ" width="1490" height="588" loading="lazy" /></div>
-  </div>
-
-  <div class="feature">
-    <div class="copy reveal">
-      <span class="label">Мерч и POS</span>
-      <h3 style="margin-top:12px">Вещи, которые хочется носить</h3>
-      <p>Спецодежда, худи, футболки, кружки, пакеты, стенды и раздатка. Подбираем материалы и контролируем тираж.</p>
-      <a class="link-arrow" href="/kejsy/premium-ran/">Кейс Премиум Ран</a>
-    </div>
-    <div class="shot duo reveal">
-      <img src={w('premium-1')} alt="Худи с фирменным стилем Премиум Ран" width="736" height="588" loading="lazy" />
-      <img src={w('parma-5')} alt="Стакан с фирменным стилем Парма Тулз" width="736" height="588" loading="lazy" />
-    </div>
-  </div>
+  ))}
 </section>
 
 <section aria-labelledby="pochemu-h">
@@ -193,8 +151,8 @@ const chips = ['Логотип', 'Фирменный стиль', 'Сайт', '�
 <section id="kejsy" aria-labelledby="kejsy-h">
   <div class="intro reveal">
     <span class="pill">Кейсы</span>
-    <h2 id="kejsy-h">Сделано в студии</h2>
-    <p>Каждый проект от знака до вещей, которые видят клиенты и сотрудники.</p>
+    <h2 id="kejsy-h">{home.casesTitle}</h2>
+    <p>{home.casesText}</p>
   </div>
   <div class="cases">
     {cases.map((c) => (
@@ -207,8 +165,8 @@ const chips = ['Логотип', 'Фирменный стиль', 'Сайт', '�
     ))}
   </div>
   <div class="masonry reveal" style="margin-top:12px">
-    {more.map(([n, cap]) => (
-      <figure><img src={w(n)} alt={cap} width="736" height="588" loading="lazy" /></figure>
+    {home.gallery.map((src) => (
+      <figure><img src={src} alt={alt(src)} width="736" height="588" loading="lazy" /></figure>
     ))}
   </div>
   <div class="center"><a class="btn ghost" href="/kejsy/">Все кейсы</a></div>
@@ -217,34 +175,26 @@ const chips = ['Логотип', 'Фирменный стиль', 'Сайт', '�
 <section id="etapy" aria-labelledby="etapy-h">
   <div class="intro reveal">
     <span class="pill">Как работаем</span>
-    <h2 id="etapy-h">Одна встреча, одна смета, один ответственный</h2>
+    <h2 id="etapy-h">{home.stepsTitle}</h2>
   </div>
   <ol class="steps reveal">
-    <li><b>Аудит</b><span>Бесплатно разбираем текущий логотип, сайт и носители.</span></li>
-    <li><b>Смета</b><span>Пакет, цена и срок фиксируются в договоре.</span></li>
-    <li><b>Концепции</b><span>3 направления на выбор, презентация вживую или онлайн.</span></li>
-    <li><b>Разработка</b><span>Стиль, сайт, носители. Два круга правок входят в цену.</span></li>
-    <li><b>Запуск</b><span>Файлы для типографии, сайт в поиске, контроль печати.</span></li>
+    {home.steps.map((st) => <li><b>{st.title}</b><span>{st.text}</span></li>)}
   </ol>
 </section>
 
 <section id="voprosy" aria-labelledby="voprosy-h">
   <div class="intro reveal"><span class="pill">Вопросы</span><h2 id="voprosy-h">Частые вопросы</h2></div>
   <div class="faq reveal">
-    <details><summary>Сколько стоит фирменный стиль для компании?</summary><p>От 45 000 ₽ за логотип с базовым гайдом до 290 000 ₽ за полный пакет с сайтом-каталогом и оформлением транспорта. Точная цена фиксируется в договоре после бесплатного аудита.</p></details>
-    <details><summary>Работаете с другими городами?</summary><p>Да, работаем удалённо с компаниями из любых городов России. Созвоны, презентации и согласования проходят онлайн.</p></details>
-    <details><summary>Сделаете сайт, который приводит заявки из поиска?</summary><p>Да. Сайт собирается под запросы ваших клиентов в Яндексе: отдельные страницы под продукцию и услуги, микроразметка, быстрая загрузка, подключение Яндекс Вебмастера и Метрики.</p></details>
-    <details><summary>Кто отвечает за печать и производство носителей?</summary><p>Готовим файлы под конкретную типографию или подрядчика, подбираем материалы и контролируем цветопробу. За плечами 10+ лет офлайн-производства: тиражи, POS, сувенирка.</p></details>
-    <details><summary>Что если ни одна концепция не подойдёт?</summary><p>Перед стартом согласуем бриф и примеры, которые вам нравятся, поэтому промахи редки. Если ни одно из трёх направлений не подошло, разрабатываем новое по тому же брифу. Все права на результат передаются вам по договору.</p></details>
+    {home.faq.map((x) => <details><summary>{x.q}</summary><p>{x.a}</p></details>)}
   </div>
 </section>
 
 <section class="final" aria-labelledby="final-h">
   <div class="reveal">
-    <h2 id="final-h">Ваш новый бренд начинается здесь</h2>
-    <p class="lead" style="margin:24px auto 0;color:var(--muted);font-size:19px">Расскажите, что нужно. Ответим за рабочий день со сметой и сроком.</p>
+    <h2 id="final-h">{home.final.title}</h2>
+    <p class="lead" style="margin:24px auto 0;color:var(--muted);font-size:19px">{home.final.text}</p>
     <div class="chips" role="group" aria-label="Что нужно">
-      {chips.map((c) => <button type="button" data-chip={c}>{c}</button>)}
+      {home.final.chips.map((c) => <button type="button" data-chip={c}>{c}</button>)}
     </div>
   </div>
   <LeadForm />
