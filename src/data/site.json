@@ -9,6 +9,9 @@
   "cvUrl": "",
   "portfolioUrl": "",
   "formEndpoint": "",
+  "metrikaId": "",
+  "yandexVerification": "",
+  "googleVerification": "",
   "packages": [
     {
       "label": "Старт",

@@ -36,7 +36,7 @@ import site from '../data/site.json';
       if (!res.ok) throw new Error();
       form.reset();
       msg.textContent = 'Заявка отправлена. Ответим в течение рабочего дня.';
-      (window as any).ym?.(0, 'reachGoal', 'lead');
+      const w = window as any; if (w.__ymId) w.ym?.(w.__ymId, 'reachGoal', 'lead');
     } catch {
       msg.textContent = 'Не получилось отправить. Напишите в Telegram или позвоните.';
     }

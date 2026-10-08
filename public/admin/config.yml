@@ -69,6 +69,9 @@ collections:
           - { name: dprofile, label: "Ссылка на Dprofile", widget: string, required: false }
           - { name: cvUrl, label: "Файл CV (PDF)", widget: file, required: false }
           - { name: portfolioUrl, label: "Файл портфолио (PDF)", widget: file, required: false }
+          - { name: metrikaId, label: "Номер счётчика Яндекс Метрики", widget: string, required: false }
+          - { name: yandexVerification, label: "Код подтверждения Яндекс Вебмастера (content из meta-тега)", widget: string, required: false }
+          - { name: googleVerification, label: "Код подтверждения Google Search Console (content из meta-тега)", widget: string, required: false }
           - { name: formEndpoint, label: "Адрес отправки формы", widget: string, required: false }
           - name: packages
             label: Пакеты
