@@ -49,7 +49,7 @@ const org = {
       for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
       k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-      ym(id, "init", { clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true });
+      ym(id, "init", { ssr: true, clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true, referrer: document.referrer, url: location.href });
       window.__ymId = id;
       // Цели: клик в Telegram, звонок, почта, скачивание CV и портфолио
       document.addEventListener('click', function (e) {
@@ -65,6 +65,7 @@ const org = {
   {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
 </head>
 <body>
+  {site.metrikaId && <noscript><div><img src={`https://mc.yandex.ru/watch/${site.metrikaId}`} style="position:absolute;left:-9999px" alt="" /></div></noscript>}
   <header class="top">
     <div class="wrap bar">
       <a class="logo" href="/" aria-label="Design Tiunov, на главную"><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></a>
