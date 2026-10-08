@@ -65,6 +65,10 @@ collections:
           - { name: phone, label: Телефон, widget: string }
           - { name: telegram, label: "Telegram (без @)", widget: string }
           - { name: email, label: Почта, widget: string }
+          - { name: behance, label: "Ссылка на Behance", widget: string, required: false }
+          - { name: dprofile, label: "Ссылка на Dprofile", widget: string, required: false }
+          - { name: cvUrl, label: "Файл CV (PDF)", widget: file, required: false }
+          - { name: portfolioUrl, label: "Файл портфолио (PDF)", widget: file, required: false }
           - { name: formEndpoint, label: "Адрес отправки формы", widget: string, required: false }
           - name: packages
             label: Пакеты
@@ -123,6 +127,14 @@ collections:
           - { name: casesTitle, label: "Кейсы: заголовок", widget: string }
           - { name: casesText, label: "Кейсы: подзаголовок", widget: text }
           - { name: gallery, label: "Витрина работ под кейсами", widget: list, field: { name: image, label: Картинка, widget: image } }
+          - name: about
+            label: Обо мне
+            widget: object
+            fields:
+              - { name: pill, label: Метка, widget: string }
+              - { name: title, label: Заголовок, widget: string }
+              - { name: photo, label: Фото, widget: image }
+              - { name: text, label: "Абзацы", widget: list, field: { name: p, label: Абзац, widget: text } }
           - { name: stepsTitle, label: "Этапы: заголовок", widget: string }
           - name: steps
             label: Этапы

@@ -11,6 +11,8 @@ gallery:
   - "/img/work/premium-4.webp"
   - "/img/work/premium-5.webp"
   - "/img/work/premium-6.webp"
+  - "/img/work/temnye-nochi-1.webp"
+  - "/img/work/temnye-nochi-2.webp"
 order: 4
 ---
 ## Задача

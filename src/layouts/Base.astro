@@ -48,12 +48,12 @@ const org = {
 <body>
   <header class="top">
     <div class="wrap bar">
-      <a class="logo" href="/">Тиунов<span>/</span>студия</a>
+      <a class="logo" href="/" aria-label="Design Tiunov, на главную"><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></a>
       <nav class="main" aria-label="Разделы">
         <a href="/#uslugi">Услуги</a>
         <a href="/kejsy/">Кейсы</a>
         <a href="/#pakety">Цены</a>
-        <a href="/#etapy">Как работаем</a>
+        <a href="/#obo-mne">Обо мне</a>
         <a href="/blog/">Блог</a>
       </nav>
       <a class="btn primary sm" href="/#zayavka">Обсудить проект</a>
@@ -64,7 +64,7 @@ const org = {
     <div class="wrap">
       <div class="cols">
         <div class="about">
-          <a class="logo" href="/">Тиунов<span>/</span>студия</a>
+          <a class="logo" href="/" aria-label="Design Tiunov, на главную"><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></a>
           <p>Фирменный стиль, сайты и носители для бизнеса. Работаем по всей России.</p>
         </div>
         <div><h4>Услуги</h4><ul>
@@ -83,6 +83,10 @@ const org = {
           <li><a href={`https://t.me/${site.telegram}`}>Telegram</a></li>
           <li><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a></li>
           <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          {site.behance && <li><a href={site.behance} target="_blank" rel="noopener">Behance</a></li>}
+          {site.dprofile && <li><a href={site.dprofile} target="_blank" rel="noopener">Dprofile</a></li>}
+          {site.cvUrl && <li><a href={site.cvUrl} download>Скачать CV</a></li>}
+          {site.portfolioUrl && <li><a href={site.portfolioUrl} download>Скачать портфолио</a></li>}
           <li><a href="/#zayavka">Оставить заявку</a></li>
         </ul></div>
       </div>

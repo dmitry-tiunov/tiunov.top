@@ -4,15 +4,24 @@ import Packages from '../components/Packages.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { getCollection } from 'astro:content';
 import home from '../data/home.json';
+import site from '../data/site.json';
 
-const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order).slice(0, 4);
+const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order).slice(0, 6);
 // Лента в герое: картинки раскладываются по трём колонкам
 const reel = [0, 1, 2].map((c) => home.reel.filter((_, i) => i % 3 === c));
 const alt = (src: string) => src.split('/').pop()!.replace(/-\d+\.\w+$/, '');
+const links = [
+  site.telegram && { href: `https://t.me/${site.telegram}`, text: 'Написать в Telegram', primary: true },
+  site.behance && { href: site.behance, text: 'Behance' },
+  site.dprofile && { href: site.dprofile, text: 'Dprofile' },
+  site.cvUrl && { href: site.cvUrl, text: 'Скачать CV', download: true },
+  site.portfolioUrl && { href: site.portfolioUrl, text: 'Скачать портфолио', download: true },
+].filter(Boolean) as { href: string; text: string; primary?: boolean; download?: boolean }[];
 ---
 <Base title={home.seoTitle} description={home.seoDescription}>
 <main>
-<div class="wrap hero" id="top">
+<div class="hero-full" id="top">
+<div class="wrap hero">
   <a class="badge reveal" href="#zayavka"><b>{home.hero.badgeTag}</b> {home.hero.badgeText} <i>→</i></a>
   <h1 class="reveal">{home.hero.title}</h1>
   <p class="lead reveal">{home.hero.lead}</p>
@@ -20,6 +29,10 @@ const alt = (src: string) => src.split('/').pop()!.replace(/-\d+\.\w+$/, '');
     <a class="btn primary" href="#zayavka">{home.hero.primary}</a>
     <a class="btn ghost" href="#kejsy">{home.hero.secondary}</a>
   </div>
+</div>
+<div class="wordmark wrap"><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></div>
+</div>
+<div class="wrap">
   <div class="stage reveal" aria-label="Работы студии">
     <div class="reel">
       {reel.map((col) => (
@@ -170,6 +183,22 @@ const alt = (src: string) => src.split('/').pop()!.replace(/-\d+\.\w+$/, '');
     ))}
   </div>
   <div class="center"><a class="btn ghost" href="/kejsy/">Все кейсы</a></div>
+</section>
+
+<section id="obo-mne" aria-labelledby="obo-mne-h">
+  <div class="about-me">
+    <img class="reveal" src={home.about.photo} alt={home.about.title} width="983" height="1595" loading="lazy" />
+    <div class="reveal">
+      <span class="pill">{home.about.pill}</span>
+      <h2 id="obo-mne-h" style="margin-top:20px">{home.about.title}</h2>
+      {home.about.text.map((t) => <p>{t}</p>)}
+      {links.length > 0 && (
+        <div class="links">
+          {links.map((l) => <a class:list={['btn', l.primary ? 'primary' : 'ghost']} href={l.href} target={l.download ? undefined : '_blank'} rel="noopener" download={l.download || undefined}>{l.text}</a>)}
+        </div>
+      )}
+    </div>
+  </div>
 </section>
 
 <section id="etapy" aria-labelledby="etapy-h">
