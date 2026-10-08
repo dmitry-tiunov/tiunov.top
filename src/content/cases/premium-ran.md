@@ -4,6 +4,13 @@ description: "Знак и стиль беговых проектов, мерч, 
 client: "Премиум Ран · Тёмные ночи"
 tags: ["Стиль", "Сувенирка"]
 summary: "Знак и стиль беговых проектов, мерч, значки, медали и наградная продукция."
+cover: "/img/work/premium-1.webp"
+gallery:
+  - "/img/work/premium-2.webp"
+  - "/img/work/premium-3.webp"
+  - "/img/work/premium-4.webp"
+  - "/img/work/premium-5.webp"
+  - "/img/work/premium-6.webp"
 order: 4
 ---
 ## Задача

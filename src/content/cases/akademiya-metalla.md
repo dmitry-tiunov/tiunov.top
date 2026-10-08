@@ -4,6 +4,12 @@ description: "Логотип, фирменный стиль, оформлени�
 client: "Академия Металла"
 tags: ["Фирстиль", "Транспорт"]
 summary: "Знак, фирменный стиль, оформление фургона, спецодежды, стаканов и вывески, шаблоны для соцсетей."
+cover: "/img/work/akademiya-1.webp"
+gallery:
+  - "/img/work/akademiya-2.webp"
+  - "/img/work/akademiya-3.webp"
+  - "/img/work/akademiya-4.webp"
+  - "/img/work/akademiya-5.webp"
 order: 1
 ---
 ## Задача

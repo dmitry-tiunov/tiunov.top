@@ -4,6 +4,12 @@ description: "Логотип, оформление грузовой техник
 client: "РСБ"
 tags: ["Знак", "Наружная реклама"]
 summary: "Знак, оформление самосвалов, билборды, наклейки, таблички с режимом работы, посты."
+cover: "/img/work/rsb-1.webp"
+gallery:
+  - "/img/work/rsb-2.webp"
+  - "/img/work/rsb-3.webp"
+  - "/img/work/rsb-4.webp"
+  - "/img/work/rsb-5.webp"
 order: 3
 ---
 ## Задача

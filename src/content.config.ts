@@ -20,6 +20,8 @@ const cases = defineCollection({
     tags: z.array(z.string()).default([]),
     summary: z.string(),
     order: z.number().default(100),
+    cover: z.string().optional(),
+    gallery: z.array(z.string()).default([]),
   }),
 });
 

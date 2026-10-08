@@ -4,6 +4,13 @@ description: "Логотип, фирменный паттерн, бланки, �
 client: "Парма Тулз"
 tags: ["Логотип", "Мерч"]
 summary: "Логотип и фирменный паттерн, бланки, ограждения, кружки, пакеты, промо для соцсетей."
+cover: "/img/work/parma-1.webp"
+gallery:
+  - "/img/work/parma-2.webp"
+  - "/img/work/parma-3.webp"
+  - "/img/work/parma-4.webp"
+  - "/img/work/parma-5.webp"
+  - "/img/work/parma-6.webp"
 order: 2
 ---
 ## Задача

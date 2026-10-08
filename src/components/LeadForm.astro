@@ -1,10 +1,9 @@
 ---
 import site from '../data/site.json';
 ---
-<section id="zayavka" aria-labelledby="zayavka-h" style="padding-bottom:40px">
-  <div class="lead-form">
+<div id="zayavka" class="lead-form reveal" style="scroll-margin-top:80px">
     <div class="label">Бесплатно · ответ за 1 рабочий день</div>
-    <h2 id="zayavka-h" style="margin-top:12px">Аудит вашего бренда и сайта</h2>
+    <h3 id="zayavka-h" style="margin-top:12px">Аудит вашего бренда и сайта</h3>
     <p style="margin-top:12px;opacity:.8">Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
     <form id="lead" data-endpoint={site.formEndpoint} novalidate>
       <label>Имя<input id="f-name" name="name" required autocomplete="name"></label>
@@ -18,8 +17,7 @@ import site from '../data/site.json';
         <span id="form-msg" role="status"></span>
       </div>
     </form>
-  </div>
-</section>
+</div>
 <script>
   const form = document.getElementById('lead') as HTMLFormElement;
   const msg = document.getElementById('form-msg')!;

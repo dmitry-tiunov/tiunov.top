@@ -5,11 +5,12 @@ const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a,
 ---
 <Base title="Кейсы: фирменный стиль, логотипы, носители | Тиунов / студия" description="Проекты студии: логотипы, фирменные стили, оформление транспорта, мерч и сайты.">
 <div class="wrap">
-  <section>
-    <div class="head"><h1>Кейсы</h1></div>
+  <section style="padding-top:72px">
+    <div class="intro"><span class="pill">Портфолио</span><h1 style="margin-top:20px;font-size:clamp(46px,8vw,96px)">Кейсы</h1><p>Логотипы, фирменные стили, транспорт, мерч и сайты.</p></div>
     <div class="cases">
       {cases.map((c) => (
-        <a class="case" href={`/kejsy/${c.id}/`} style="color:inherit;text-decoration:none">
+        <a class="case reveal" href={`/kejsy/${c.id}/`}>
+          {c.data.cover && <div class="cover"><img src={c.data.cover} alt={c.data.client} loading="lazy" /></div>}
           <div class="tag">{c.data.tags.map((t) => <span>{t}</span>)}</div>
           <h3>{c.data.client}</h3>
           <p>{c.data.summary}</p>

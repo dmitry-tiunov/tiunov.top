@@ -40,28 +40,66 @@ const org = {
   <meta property="og:description" content={description}>
   <meta property="og:url" content={canonical}>
   <meta property="og:locale" content="ru_RU">
+  <script is:inline>document.documentElement.classList.add('js')</script>
   <link rel="sitemap" href="/sitemap-index.xml">
   <script type="application/ld+json" set:html={JSON.stringify(org)} />
   {jsonld && <script type="application/ld+json" set:html={JSON.stringify(jsonld)} />}
 </head>
 <body>
-  <div class="wrap">
-    <header class="top">
+  <header class="top">
+    <div class="wrap bar">
       <a class="logo" href="/">Тиунов<span>/</span>студия</a>
-      <nav aria-label="Разделы">
-        <a href="/#pakety">Пакеты и цены</a>
+      <nav class="main" aria-label="Разделы">
+        <a href="/#uslugi">Услуги</a>
         <a href="/kejsy/">Кейсы</a>
+        <a href="/#pakety">Цены</a>
+        <a href="/#etapy">Как работаем</a>
         <a href="/blog/">Блог</a>
-        <a href="/#zayavka">Заявка</a>
       </nav>
-    </header>
-  </div>
+      <a class="btn primary sm" href="/#zayavka">Обсудить проект</a>
+    </div>
+  </header>
   <slot />
-  <div class="wrap">
-    <footer>
-      <span>{site.name} · {site.city}</span>
-      <span>Telegram: @{site.telegram} · {site.phone} · {site.email}</span>
-    </footer>
-  </div>
+  <footer class="site">
+    <div class="wrap">
+      <div class="cols">
+        <div class="about">
+          <a class="logo" href="/">Тиунов<span>/</span>студия</a>
+          <p>Фирменный стиль, сайты и носители для бизнеса. Работаем по всей России.</p>
+        </div>
+        <div><h4>Услуги</h4><ul>
+          <li><a href="/#uslugi">Айдентика и брендбук</a></li>
+          <li><a href="/#uslugi">Сайты</a></li>
+          <li><a href="/#uslugi">Транспорт и вывески</a></li>
+          <li><a href="/#uslugi">Мерч и POS</a></li>
+        </ul></div>
+        <div><h4>Студия</h4><ul>
+          <li><a href="/kejsy/">Кейсы</a></li>
+          <li><a href="/#pakety">Пакеты и цены</a></li>
+          <li><a href="/blog/">Блог</a></li>
+          <li><a href="/#voprosy">Вопросы</a></li>
+        </ul></div>
+        <div><h4>Связаться</h4><ul>
+          <li><a href={`https://t.me/${site.telegram}`}>Telegram</a></li>
+          <li><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a></li>
+          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          <li><a href="/#zayavka">Оставить заявку</a></li>
+        </ul></div>
+      </div>
+      <div class="legal">
+        <span>© {new Date().getFullYear()} {site.name} · {site.city}</span>
+        <a href="/privacy/" style="color:inherit">Политика обработки персональных данных</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    const els = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+      els.forEach((el) => io.observe(el));
+    } else els.forEach((el) => el.classList.add('in'));
+  </script>
 </body>
 </html>

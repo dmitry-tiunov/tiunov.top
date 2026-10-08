@@ -33,6 +33,8 @@ collections:
       - { name: description, label: "Описание для поиска", widget: text }
       - { name: summary, label: "Коротко для карточки", widget: text }
       - { name: tags, label: Теги, widget: list }
+      - { name: cover, label: Обложка, widget: image, required: false }
+      - { name: gallery, label: Галерея, widget: list, field: { name: image, label: Картинка, widget: image }, required: false }
       - { name: order, label: "Порядок на главной", widget: number, default: 100 }
       - { name: draft, label: Черновик, widget: boolean, default: false }
       - { name: body, label: Текст, widget: markdown }

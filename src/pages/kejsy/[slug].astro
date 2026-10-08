@@ -12,11 +12,18 @@ const { Content } = await render(entry);
 <Base title={entry.data.title} description={entry.data.description}>
 <div class="wrap">
   <div class="crumbs label"><a href="/kejsy/">Кейсы</a> / {entry.data.client}</div>
-  <article class="prose" style="padding-block:32px">
-    <div class="case"><div class="tag">{entry.data.tags.map((t) => <span>{t}</span>)}</div></div>
-    <h1 style="margin-top:16px">{entry.data.client}</h1>
+  <div style="padding-top:32px">
+    <div class="tags">{entry.data.tags.map((t) => <span>{t}</span>)}</div>
+    <h1 style="margin-top:20px">{entry.data.client}</h1>
+    <p style="margin-top:20px;color:var(--muted);font-size:19px;line-height:1.4">{entry.data.summary}</p>
+  </div>
+  {entry.data.cover && <img class="case-hero reveal" src={entry.data.cover} alt={entry.data.client} />}
+  <article class="prose" style="padding-block:48px">
     <Content />
   </article>
-  <LeadForm />
+  {entry.data.gallery.length > 0 && (
+    <div class="gallery">{entry.data.gallery.map((g) => <img class="reveal" src={g} alt={entry.data.client} loading="lazy" />)}</div>
+  )}
+  <section><LeadForm /></section>
 </div>
 </Base>
