@@ -1,11 +1,16 @@
 ---
 import site from '../data/site.json';
+// Форма Яндекс Форм: данные хранятся в России (152-ФЗ). Ссылка вида https://forms.yandex.ru/u/<id>/
+const yaId = site.formEmbed?.match(/forms\.yandex\.ru\/(?:u|cloud)\/([\w-]+)/)?.[1];
 ---
 <div id="zayavka" class="lead-form reveal" style="scroll-margin-top:80px">
     <div class="label">Бесплатно · ответ за 1 рабочий день</div>
     <h3 id="zayavka-h" style="margin-top:12px">Аудит вашего бренда и сайта</h3>
     <p style="margin-top:12px;opacity:.8">Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
-    <form id="lead" data-endpoint={site.formEndpoint} novalidate>
+    {yaId ? (
+      <div class="ya-form"><iframe src={`https://forms.yandex.ru/u/${yaId}/?iframe=1&theme=dark`} name={`ya-form-${yaId}`} title="Форма заявки" loading="lazy" style="width:100%;min-height:640px;border:0"></iframe></div>
+    ) : (
+    <form id="lead" data-endpoint={site.formEndpoint} data-tg={site.telegram} data-phone={site.phone} novalidate>
       <label>Имя<input id="f-name" name="name" required autocomplete="name"></label>
       <label>Телефон или Telegram<input id="f-contact" name="contact" required></label>
       <label>Компания и сайт<input id="f-site" name="site" placeholder="company.ru"></label>
@@ -17,11 +22,13 @@ import site from '../data/site.json';
         <span id="form-msg" role="status"></span>
       </div>
     </form>
+    )}
 </div>
+{yaId && <script is:inline src="https://forms.yandex.ru/_static/embed.js"></script>}
 <script>
-  const form = document.getElementById('lead') as HTMLFormElement;
+  const form = document.getElementById('lead') as HTMLFormElement | null;
   const msg = document.getElementById('form-msg')!;
-  form.addEventListener('submit', async (e) => {
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = new FormData(form);
     if (!String(data.get('name')).trim() || !String(data.get('contact')).trim()) {
@@ -29,7 +36,7 @@ import site from '../data/site.json';
       return;
     }
     const endpoint = form.dataset.endpoint;
-    if (!endpoint) { msg.textContent = 'Форма ещё не подключена. Напишите в Telegram.'; return; }
+    if (!endpoint) { msg.innerHTML = `Форма скоро заработает. Пока напишите в <a href="https://t.me/${form.dataset.tg}" target="_blank" rel="noopener">Telegram</a> или позвоните ${form.dataset.phone}.`; return; }
     msg.textContent = 'Отправляем…';
     try {
       const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });

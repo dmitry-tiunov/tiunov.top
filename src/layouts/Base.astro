@@ -21,7 +21,8 @@ const org = {
   name: site.name,
   url: Astro.site?.href,
   telephone: site.phone,
-  email: site.email,
+  ...(site.email ? { email: site.email } : {}),
+  sameAs: [site.telegram && `https://t.me/${site.telegram}`, site.behance, site.dprofile].filter(Boolean),
   address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: 'RU' },
   areaServed: 'RU',
 };
@@ -102,7 +103,7 @@ const org = {
         <div><h4>Связаться</h4><ul>
           <li><a href={`https://t.me/${site.telegram}`}>Telegram</a></li>
           <li><a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a></li>
-          <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+          {site.email && <li><a href={`mailto:${site.email}`}>{site.email}</a></li>}
           {site.behance && <li><a href={site.behance} target="_blank" rel="noopener">Behance</a></li>}
           {site.dprofile && <li><a href={site.dprofile} target="_blank" rel="noopener">Dprofile</a></li>}
           {site.cvUrl && <li><a href={site.cvUrl} download>Скачать CV</a></li>}
