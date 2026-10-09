@@ -4,8 +4,8 @@ backend:
   branch: main
 
 locale: ru
-media_folder: public/images
-public_folder: /images
+media_folder: public/img
+public_folder: /img
 
 collections:
   - name: blog
