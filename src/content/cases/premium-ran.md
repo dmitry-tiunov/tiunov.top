@@ -6,15 +6,21 @@ summary: Знак и стиль беговых проектов, мерч, зн�
 tags:
   - Стиль
   - Сувенирка
-cover: /img/preview.jpg
+cover: "/img/cases/premium-ran/preview.webp"
 gallery:
-  - /img/work/premium-2.webp
-  - /img/work/premium-3.webp
-  - /img/work/premium-4.webp
-  - /img/work/premium-5.webp
-  - /img/work/premium-6.webp
-  - /img/work/temnye-nochi-1.webp
-  - /img/work/temnye-nochi-2.webp
+  - "/img/cases/premium-ran/2.webp"
+  - "/img/cases/premium-ran/3.webp"
+  - "/img/cases/premium-ran/1.webp"
+  - "/img/cases/premium-ran/5.webp"
+  - "/img/cases/premium-ran/6.webp"
+  - "/img/cases/premium-ran/4.webp"
+  - "/img/cases/premium-ran/8.webp"
+  - "/img/cases/premium-ran/9.webp"
+  - "/img/cases/premium-ran/7.webp"
+  - "/img/cases/premium-ran/10.webp"
+  - "/img/cases/premium-ran/11.webp"
+  - "/img/work/temnye-nochi-1.webp"
+  - "/img/work/temnye-nochi-2.webp"
 order: 4
 draft: false
 ---
