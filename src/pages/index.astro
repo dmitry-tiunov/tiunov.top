@@ -5,10 +5,16 @@ import LeadForm from '../components/LeadForm.astro';
 import { getCollection } from 'astro:content';
 import home from '../data/home.json';
 import site from '../data/site.json';
+import { imageSize } from '../lib/imageSize';
 
-const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order).slice(0, 6);
-// Лента в герое: картинки раскладываются по трём колонкам
-const reel = [0, 1, 2].map((c) => home.reel.filter((_, i) => i % 3 === c));
+const allCases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const cases = allCases.slice(0, 6);
+// Лента в герое: случайные картинки из всех кейсов. Тонкие полосы и вертикальные кадры пропускаем, им не идёт обрезка
+const pool = [...new Set(allCases.flatMap((c) => [c.data.cover, ...c.data.gallery]).filter(Boolean) as string[])].filter((src) => {
+  const s = imageSize(src);
+  return !!s && s.w / s.h >= 1 && s.w / s.h <= 2.1;
+});
+const REEL = 15;
 const alt = (src: string) => src.split('/').pop()!.replace(/-\d+\.\w+$/, '');
 const links = [
   site.telegram && { href: `https://t.me/${site.telegram}`, text: 'Написать в Telegram', primary: true },
@@ -34,14 +40,22 @@ const links = [
 <div class="wrap">
   <div class="stage reveal" aria-label="Работы студии">
     <div class="reel">
-      {reel.map((col) => (
+      {[0, 1, 2].map((c) => (
         <div class="col">
-          {[...col, ...col].map((src, i) => (
-            <img src={src} alt="" width="736" height="588" loading={i < 3 ? 'eager' : 'lazy'} decoding="async" />
+          {Array.from({ length: (REEL / 3) * 2 }, (_, i) => (
+            <img data-slot={c + 3 * (i % (REEL / 3))} alt="" width="736" height="588" loading={i < 2 ? 'eager' : 'lazy'} decoding="async" />
           ))}
         </div>
       ))}
     </div>
+    <script is:inline define:vars={{ pool, REEL }}>
+      // Каждый визит свой набор: перемешиваем пул и раздаём по слотам (копии слота для бесконечной прокрутки получают ту же картинку)
+      const p = pool.slice();
+      for (let i = p.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [p[i], p[j]] = [p[j], p[i]]; }
+      document.querySelectorAll('.reel img[data-slot]').forEach((img) => { const src = p[img.dataset.slot % p.length];
+        img.onerror = () => { img.onerror = null; img.src = src; };
+        img.src = '/thumbs' + src.replace(/\.\w+$/, '.webp'); });
+    </script>
   </div>
   {home.logos.length > 0 && (
     <div class="logos reveal">

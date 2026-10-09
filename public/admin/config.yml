@@ -100,7 +100,6 @@ collections:
               - { name: lead, label: Подзаголовок, widget: text }
               - { name: primary, label: "Белая кнопка", widget: string }
               - { name: secondary, label: "Тёмная кнопка", widget: string }
-          - { name: reel, label: "Лента работ на первом экране (лучше 12–15 картинок)", widget: list, field: { name: image, label: Картинка, widget: image } }
           - { name: logosTitle, label: "Заголовок над логотипами", widget: string }
           - name: logos
             label: "Логотипы клиентов (белые PNG на прозрачном фоне)"

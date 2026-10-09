@@ -79,7 +79,7 @@ header.top .btn{justify-self:end}
 .reel .col{display:flex;flex-direction:column;gap:12px;animation:reel-up 60s linear infinite}
 .reel .col:nth-child(2){animation-name:reel-down;animation-duration:70s}
 .reel .col:nth-child(3){animation-duration:55s}
-.reel img{width:100%;border-radius:var(--r-xl);aspect-ratio:var(--ar,1.25)}
+.reel img{width:100%;height:auto;border-radius:var(--r-xl);aspect-ratio:var(--ar,1.25);object-fit:cover;background:var(--surface-2)}
 .reel:hover .col{animation-play-state:paused}
 @keyframes reel-up{from{transform:translateY(0)}to{transform:translateY(-50%)}}
 @keyframes reel-down{from{transform:translateY(-50%)}to{transform:translateY(0)}}
