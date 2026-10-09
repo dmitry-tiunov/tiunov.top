@@ -8,7 +8,7 @@ import site from '../data/site.json';
 import { imageSize } from '../lib/imageSize';
 
 const allCases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
-const cases = allCases.slice(0, 6);
+const cases = allCases;
 // Лента в герое: случайные картинки из всех кейсов. Тонкие полосы и вертикальные кадры пропускаем, им не идёт обрезка
 const pool = [...new Set(allCases.flatMap((c) => [c.data.cover, ...c.data.gallery]).filter(Boolean) as string[])].filter((src) => {
   const s = imageSize(src);
