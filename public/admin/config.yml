@@ -30,7 +30,6 @@ collections:
     identifier_field: client
     summary: "{{client}}"
     thumbnail: cover
-    sortable_fields: { fields: [order, client], default: { field: order, direction: ascending } }
     fields:
       - { name: client, label: Клиент, widget: string }
       - { name: title, label: "Заголовок (title)", widget: string }
@@ -39,7 +38,7 @@ collections:
       - { name: tags, label: Теги, widget: list }
       - { name: cover, label: Обложка, widget: image, required: false }
       - { name: gallery, label: Галерея, widget: list, field: { name: image, label: Картинка, widget: image }, required: false }
-      - { name: order, label: "Порядок на главной", widget: number, default: 100 }
+      - { name: order, label: "Порядок (запасной, если кейса нет в списке «Порядок кейсов»)", widget: number, default: 100, required: false }
       - { name: draft, label: Черновик, widget: boolean, default: false }
       - { name: body, label: Текст, widget: markdown }
 
@@ -60,6 +59,14 @@ collections:
   - name: settings
     label: Настройки
     files:
+      - name: cases-order
+        label: Порядок кейсов
+        file: src/data/cases-order.json
+        fields:
+          - name: cases
+            label: "Кейсы по порядку (перетаскивайте карточки, новый кейс добавьте кнопкой «Добавить»)"
+            widget: list
+            field: { name: slug, label: Кейс, widget: relation, collection: cases, value_field: "{{slug}}", search_fields: [client], display_fields: [client] }
       - name: site
         label: Контакты и пакеты
         file: src/data/site.json

@@ -3,10 +3,11 @@ import Base from '../layouts/Base.astro';
 import Packages from '../components/Packages.astro';
 import LeadForm from '../components/LeadForm.astro';
 import { getCollection } from 'astro:content';
+import { sortCases } from '../lib/sortCases';
 import home from '../data/home.json';
 import site from '../data/site.json';
 
-const allCases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const allCases = sortCases(await getCollection('cases', ({ data }) => !data.draft));
 const cases = allCases;
 // Лента в герое: обложки всех кейсов в случайном порядке, слотов 9–15 (кратно трём колонкам)
 const pool = allCases.map((c) => c.data.cover).filter(Boolean) as string[];

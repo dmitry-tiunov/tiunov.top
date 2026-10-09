@@ -1,7 +1,8 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-const cases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+import { sortCases } from '../../lib/sortCases';
+const cases = sortCases(await getCollection('cases', ({ data }) => !data.draft));
 ---
 <Base title="Кейсы: фирменный стиль, логотипы, носители | Тиунов / студия" description="Проекты студии: логотипы, фирменные стили, оформление транспорта, мерч и сайты.">
 <div class="wrap">
