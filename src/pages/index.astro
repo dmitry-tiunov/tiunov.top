@@ -5,16 +5,12 @@ import LeadForm from '../components/LeadForm.astro';
 import { getCollection } from 'astro:content';
 import home from '../data/home.json';
 import site from '../data/site.json';
-import { imageSize } from '../lib/imageSize';
 
 const allCases = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
 const cases = allCases;
-// Лента в герое: случайные картинки из всех кейсов. Тонкие полосы и вертикальные кадры пропускаем, им не идёт обрезка
-const pool = [...new Set(allCases.flatMap((c) => [c.data.cover, ...c.data.gallery]).filter(Boolean) as string[])].filter((src) => {
-  const s = imageSize(src);
-  return !!s && s.w / s.h >= 1 && s.w / s.h <= 2.1;
-});
-const REEL = 15;
+// Лента в герое: обложки всех кейсов в случайном порядке, слотов 9–15 (кратно трём колонкам)
+const pool = allCases.map((c) => c.data.cover).filter(Boolean) as string[];
+const REEL = Math.min(15, Math.max(9, Math.ceil(pool.length / 3) * 3));
 const alt = (src: string) => src.split('/').pop()!.replace(/-\d+\.\w+$/, '');
 const links = [
   site.telegram && { href: `https://t.me/${site.telegram}`, text: 'Написать в Telegram', primary: true },
