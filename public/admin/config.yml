@@ -27,6 +27,10 @@ collections:
     folder: src/content/cases
     create: true
     slug: "{{slug}}"
+    identifier_field: client
+    summary: "{{client}}"
+    thumbnail: cover
+    sortable_fields: { fields: [order, client], default: { field: order, direction: ascending } }
     fields:
       - { name: client, label: Клиент, widget: string }
       - { name: title, label: "Заголовок (title)", widget: string }
