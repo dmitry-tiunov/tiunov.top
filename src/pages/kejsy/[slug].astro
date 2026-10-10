@@ -9,19 +9,19 @@ export async function getStaticPaths() {
 }
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-// Сетка: картинки до 1400px идут парами, широкие (от 1400px) занимают всю строку
-const gallery = entry.data.gallery.map((src) => {
+// Сетка по строкам: широкая картинка (от 1400px) занимает строку одна, узкие идут парами.
+// В паре ширины пропорциональны соотношению сторон, поэтому высоты совпадают и при разных размерах (например 1174 + 578).
+// Узкая картинка без пары растягивается на всю строку
+const items = entry.data.gallery.map((src) => {
   const size = imageSize(src);
-  return { src, size, wide: !!size && size.w >= 1400 };
+  return { src, size, wide: !!size && size.w >= 1400, ratio: size ? size.w / size.h : 1.33 };
 });
-// Узкая картинка без пары (перед широкой или в конце) тоже идёт на всю ширину, чтобы не было пустого места
-let run = 0;
-gallery.forEach((g, i) => {
-  if (g.wide) return void (run = 0);
-  run++;
-  const next = gallery[i + 1];
-  if (run % 2 === 1 && (!next || next.wide)) g.wide = true;
-});
+const rows: (typeof items)[] = [];
+for (let i = 0; i < items.length; i++) {
+  const next = items[i + 1];
+  if (!items[i].wide && next && !next.wide) { rows.push([items[i], next]); i++; }
+  else rows.push([items[i]]);
+}
 const coverSize = entry.data.cover ? imageSize(entry.data.cover) : null;
 ---
 <Base title={entry.data.title} description={entry.data.description}>
@@ -36,8 +36,14 @@ const coverSize = entry.data.cover ? imageSize(entry.data.cover) : null;
   <article class="prose" style="padding-block:48px">
     <Content />
   </article>
-  {gallery.length > 0 && (
-    <div class="gallery">{gallery.map((g) => <img class:list={['reveal', { wide: g.wide }]} src={g.src} alt={entry.data.client} width={g.size?.w} height={g.size?.h} loading="lazy" decoding="async" />)}</div>
+  {rows.length > 0 && (
+    <div class="gallery">
+      {rows.map((row) => (
+        <div class="g-row reveal">
+          {row.map((g) => <img src={g.src} alt={entry.data.client} width={g.size?.w} height={g.size?.h} style={`flex:${g.ratio.toFixed(4)} 1 0`} loading="lazy" decoding="async" />)}
+        </div>
+      ))}
+    </div>
   )}
   <section><LeadForm /></section>
 </div>

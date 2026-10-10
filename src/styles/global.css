@@ -188,9 +188,9 @@ a.case:hover .tag span{background:var(--surface-3)}
 .tags{display:flex;gap:6px;flex-wrap:wrap}
 .tags span{font:500 12px var(--body);background:var(--surface-2);color:var(--muted);padding:5px 10px;border-radius:var(--r-pill)}
 .case-hero{border-radius:var(--r-xxl);overflow:hidden;margin-top:32px;width:100%;height:auto}
-.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
-.gallery img{border-radius:var(--r-xl);width:100%;height:auto}
-.gallery img.wide{grid-column:1/-1}
+.gallery{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.g-row{display:flex;gap:12px}
+.g-row img{min-width:0;width:100%;height:auto;border-radius:var(--r-xl)}
 
 /* Обо мне */
 .about-me{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,5vw,80px);align-items:center}
@@ -274,7 +274,7 @@ footer.site .legal{display:flex;justify-content:space-between;gap:16px;flex-wrap
   .feature,.feature:nth-of-type(even){grid-template-columns:1fr;gap:28px;padding-block:40px}
   .feature:nth-of-type(even) .copy{order:0}
   .packages,.cases{grid-template-columns:1fr}
-  .gallery{gap:8px}
+  .gallery,.g-row{gap:8px}
   .steps{grid-template-columns:1fr 1fr}
   form{grid-template-columns:1fr}
   .lead-form{padding:28px}
