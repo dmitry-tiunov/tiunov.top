@@ -67,6 +67,19 @@ collections:
             label: "Кейсы по порядку (перетаскивайте карточки, новый кейс добавьте кнопкой «Добавить»)"
             widget: list
             field: { name: slug, label: Кейс, widget: relation, collection: cases, value_field: "{{slug}}", search_fields: [client], display_fields: [client] }
+      - name: about
+        label: Страница «Обо мне»
+        file: src/data/about.json
+        fields:
+          - { name: seoTitle, label: "SEO: заголовок", widget: string }
+          - { name: seoDescription, label: "SEO: описание", widget: text }
+          - { name: title, label: Имя, widget: string }
+          - { name: lead, label: Вступление, widget: text }
+          - { name: text, label: Абзацы, widget: list, field: { name: p, label: Абзац, widget: text } }
+          - { name: stats, label: Цифры, widget: list, fields: [ { name: value, label: Число, widget: string }, { name: label, label: Подпись, widget: string } ] }
+          - { name: path, label: Путь, widget: list, summary: "{{year}} {{title}}", fields: [ { name: year, label: Год, widget: string }, { name: title, label: Заголовок, widget: string }, { name: text, label: Текст, widget: text } ] }
+          - { name: skills, label: Что делаю, widget: list, summary: "{{title}}", fields: [ { name: title, label: Заголовок, widget: string }, { name: text, label: Текст, widget: text } ] }
+          - { name: principles, label: Принципы, widget: list, summary: "{{title}}", fields: [ { name: title, label: Заголовок, widget: string }, { name: text, label: Текст, widget: text } ] }
       - name: site
         label: Контакты и пакеты
         file: src/data/site.json

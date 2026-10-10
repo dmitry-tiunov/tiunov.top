@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import { sortCases } from '../lib/sortCases';
+import about from '../data/about.json';
+import home from '../data/home.json';
+import site from '../data/site.json';
+const cases = sortCases(await getCollection('cases', ({ data }) => !data.draft)).slice(0, 4);
+const links = [
+  site.telegram && { href: `https://t.me/${site.telegram}`, text: 'Написать в Telegram', primary: true },
+  site.behance && { href: site.behance, text: 'Behance' },
+  site.dprofile && { href: site.dprofile, text: 'Dprofile' },
+  site.cvUrl && { href: site.cvUrl, text: 'Скачать CV', download: true },
+].filter(Boolean) as { href: string; text: string; primary?: boolean; download?: boolean }[];
+const jsonld = {
+  '@context': 'https://schema.org', '@type': 'Person', name: 'Дмитрий Тиунов', jobTitle: 'Дизайнер',
+  url: 'https://tiunov.top/obo-mne/', image: `https://tiunov.top${home.about.photo}`,
+  sameAs: [site.behance, site.dprofile, site.telegram && `https://t.me/${site.telegram}`].filter(Boolean),
+};
+---
+<Base title={about.seoTitle} description={about.seoDescription} jsonld={jsonld}>
+<main class="wrap">
+  <section class="about-page" style="padding-top:72px">
+    <div class="about-me">
+      <img class="reveal" src={home.about.photo} alt={about.title} width="983" height="1595" />
+      <div class="reveal">
+        <span class="pill">Обо мне</span>
+        <h1 style="margin-top:20px;font-size:clamp(46px,7vw,88px)">{about.title}</h1>
+        <p class="about-lead">{about.lead}</p>
+        {about.text.map((t) => <p>{t}</p>)}
+        {links.length > 0 && (
+          <div class="links">
+            {links.map((l) => <a class:list={['btn', l.primary ? 'primary' : 'ghost']} href={l.href} target={l.download ? undefined : '_blank'} rel="noopener" download={l.download || undefined}>{l.text}</a>)}
+          </div>
+        )}
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="В цифрах">
+    <div class="stats reveal">
+      {about.stats.map((s) => <div><b>{s.value}</b><span>{s.label}</span></div>)}
+    </div>
+  </section>
+
+  <section aria-labelledby="put-h">
+    <div class="intro reveal"><span class="pill">Путь</span><h2 id="put-h">От типографии до бренда под ключ</h2></div>
+    <ol class="path-list reveal">
+      {about.path.map((p) => <li><i>{p.year}</i><b>{p.title}</b><span>{p.text}</span></li>)}
+    </ol>
+  </section>
+
+  <section aria-labelledby="umeyu-h">
+    <div class="intro reveal"><span class="pill">Что делаю</span><h2 id="umeyu-h">Весь путь бренда в одних руках</h2></div>
+    <div class="cards4 reveal">
+      {about.skills.map((s) => <div><b>{s.title}</b><span>{s.text}</span></div>)}
+    </div>
+  </section>
+
+  <section aria-labelledby="princ-h">
+    <div class="intro reveal"><span class="pill">Как работаю</span><h2 id="princ-h">Принципы</h2></div>
+    <div class="cards4 reveal">
+      {about.principles.map((s) => <div><b>{s.title}</b><span>{s.text}</span></div>)}
+    </div>
+  </section>
+
+  <section aria-labelledby="raboty-h">
+    <div class="intro reveal"><span class="pill">Работы</span><h2 id="raboty-h">Последние кейсы</h2></div>
+    <div class="cases">
+      {cases.map((c) => (
+        <a class="case reveal" href={`/kejsy/${c.id}/`}>
+          {c.data.cover && <div class="cover"><img src={c.data.cover} alt={c.data.client} loading="lazy" /></div>}
+          <div class="tag">{c.data.tags.map((t) => <span>{t}</span>)}</div>
+          <h3>{c.data.client}</h3>
+          <p>{c.data.summary}</p>
+        </a>
+      ))}
+    </div>
+    <div class="center-row"><a class="btn ghost" href="/kejsy/">Все кейсы</a></div>
+  </section>
+
+  <section class="final" aria-labelledby="final-h">
+    <div class="reveal">
+      <h2 id="final-h">Обсудим ваш проект?</h2>
+      <p class="lead" style="margin:24px auto 0;color:var(--muted);font-size:19px">Расскажите о задаче, и я предложу решение, срок и цену.</p>
+      <div class="center-row">
+        <a class="btn primary" href="/#zayavka">Оставить заявку</a>
+        {site.telegram && <a class="btn ghost" href={`https://t.me/${site.telegram}`} target="_blank" rel="noopener">Telegram</a>}
+      </div>
+    </div>
+  </section>
+</main>
+</Base>

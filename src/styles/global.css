@@ -312,3 +312,26 @@ footer.site .legal{display:flex;justify-content:space-between;gap:16px;flex-wrap
   *{transition:none!important;animation:none!important}
   .js .reveal{opacity:1;transform:none;filter:none}
 }
+
+/* Страница «Обо мне» */
+.about-lead{color:var(--ink)!important;font-size:clamp(19px,1.8vw,24px)!important;line-height:1.4}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.stats div,.cards4 div{background:var(--surface-1);border-radius:var(--r-xl);padding:28px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.stats b{display:block;font:600 clamp(40px,5vw,64px)/1 var(--display);letter-spacing:-.04em}
+.stats span{display:block;margin-top:12px;color:var(--muted)}
+.path-list{list-style:none;padding:0;margin:0 auto;max-width:900px}
+.path-list li{display:grid;grid-template-columns:120px 1fr;column-gap:24px;padding:24px 0;border-top:1px solid var(--hairline)}
+.path-list li:last-child{border-bottom:1px solid var(--hairline)}
+.path-list i{grid-row:span 2;font:500 15px var(--body);font-style:normal;color:var(--accent);padding-top:4px}
+.path-list b{font:500 24px var(--display);letter-spacing:-.03em}
+.path-list span{color:var(--muted);margin-top:6px}
+.cards4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.cards4 b{display:block;font:500 20px var(--display);letter-spacing:-.03em;margin-bottom:8px}
+.cards4 span{color:var(--muted)}
+@media (max-width:1000px){.cards4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){
+  .stats,.cards4{grid-template-columns:1fr}
+  .path-list li{grid-template-columns:1fr}
+  .path-list i{grid-row:auto;padding:0 0 6px}
+}
+.center-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:32px}

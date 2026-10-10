@@ -204,6 +204,7 @@ const links = [
       {home.about.text.map((t) => <p>{t}</p>)}
       {links.length > 0 && (
         <div class="links">
+          <a class="btn ghost" href="/obo-mne/">Подробнее обо мне</a>
           {links.map((l) => <a class:list={['btn', l.primary ? 'primary' : 'ghost']} href={l.href} target={l.download ? undefined : '_blank'} rel="noopener" download={l.download || undefined}>{l.text}</a>)}
         </div>
       )}
