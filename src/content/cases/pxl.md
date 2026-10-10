@@ -1,22 +1,26 @@
 ---
-title: "Айдентика и маскот для команды PXL | Кейс"
-description: "Пиксельная айдентика, маскот, шаблон презентаций, мерч и оформление мероприятий для команды PXL."
-client: "PXL"
-tags: ["Айдентика", "Маскот"]
-summary: "Пиксельная графика, маскот, модульная сетка и шаблон презентаций, шопперы, футболки, экраны для мероприятий."
-cover: "/img/cases/pxl/11.webp"
+client: PXL
+title: Айдентика и маскот для команды PXL | Кейс
+description: Пиксельная айдентика, маскот, шаблон презентаций, мерч и оформление мероприятий для команды PXL.
+summary: Пиксельная графика, маскот, модульная сетка и шаблон презентаций, шопперы, футболки, экраны для мероприятий.
+tags:
+  - Айдентика
+  - Маскот
+cover: /img/preview2.jpg
 gallery:
-  - "/img/cases/pxl/2.webp"
-  - "/img/cases/pxl/3.webp"
-  - "/img/cases/pxl/4.webp"
-  - "/img/cases/pxl/5.webp"
-  - "/img/cases/pxl/6.webp"
-  - "/img/cases/pxl/7.webp"
-  - "/img/cases/pxl/8.webp"
-  - "/img/cases/pxl/9.webp"
-  - "/img/cases/pxl/10.webp"
+  - /img/cases/pxl/2.webp
+  - /img/cases/pxl/3.webp
+  - /img/cases/pxl/4.webp
+  - /img/cases/pxl/5.webp
+  - /img/cases/pxl/6.webp
+  - /img/cases/pxl/7.webp
+  - /img/cases/pxl/8.webp
+  - /img/cases/pxl/9.webp
+  - /img/cases/pxl/10.webp
 order: 8
+draft: false
 ---
+
 ## Задача
 Описать задачу клиента.
 
