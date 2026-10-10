@@ -77,7 +77,24 @@ const org = {
         <a href="/#obo-mne">Обо мне</a>
         <a href="/blog/">Блог</a>
       </nav>
-      <a class="btn primary sm" href="/#zayavka">Обсудить проект</a>
+      <div class="bar-end">
+        <a class="btn primary sm" href="/#zayavka">Обсудить проект</a>
+        <button class="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mnav"><span></span><span></span></button>
+      </div>
+    </div>
+    <div class="mnav" id="mnav" hidden>
+      <nav class="wrap" aria-label="Меню">
+        <a href="/#uslugi">Услуги</a>
+        <a href="/kejsy/">Кейсы</a>
+        <a href="/#pakety">Цены</a>
+        <a href="/#obo-mne">Обо мне</a>
+        <a href="/blog/">Блог</a>
+      </nav>
+      <div class="wrap mnav-foot">
+        <a class="btn primary" href="/#zayavka">Обсудить проект</a>
+        {site.telegram && <a class="btn ghost" href={`https://t.me/${site.telegram}`}>Telegram</a>}
+        {site.phone && <a class="mnav-phone" href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a>}
+      </div>
     </div>
   </header>
   <slot />
@@ -118,6 +135,19 @@ const org = {
     </div>
   </footer>
   <script>
+    const burger = document.querySelector('.burger');
+    const mnav = document.getElementById('mnav');
+    const setMenu = (open) => {
+      burger.setAttribute('aria-expanded', String(open));
+      burger.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+      mnav.hidden = !open;
+      document.documentElement.classList.toggle('menu-open', open);
+    };
+    burger.addEventListener('click', () => setMenu(mnav.hidden));
+    mnav.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !mnav.hidden) setMenu(false); });
+    matchMedia('(min-width:811px)').addEventListener('change', (e) => { if (e.matches) setMenu(false); });
+
     const els = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
