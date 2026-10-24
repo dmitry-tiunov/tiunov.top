@@ -70,10 +70,11 @@ const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponen
     }
   });
 
-  // Кнопки «написать»: чипсы «Что нужно» шлют событие lead:need, выбранное попадает в текст сообщения и письма.
+  // Кнопки «написать»: чипсы «Что нужно» шлют событие lead:need со списком выбранного,
+  // он попадает в текст сообщения и письма.
   const contact = document.querySelector<HTMLElement>('#zayavka .contact');
   if (contact) {
-    const needs: string[] = [];
+    let needs: string[] = [];
     const tg = contact.querySelector<HTMLAnchorElement>('[data-tg]');
     const mail = contact.querySelector<HTMLAnchorElement>('[data-mail]');
     const update = () => {
@@ -82,8 +83,8 @@ const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponen
       if (mail) mail.href = `mailto:${mail.dataset.mail}?subject=${encodeURIComponent('Аудит бренда и сайта')}&body=${encodeURIComponent(text)}`;
     };
     document.addEventListener('lead:need', (e) => {
-      const need = (e as CustomEvent<string>).detail;
-      if (need && !needs.includes(need)) { needs.push(need); update(); }
+      needs = (e as CustomEvent<string[]>).detail;
+      update();
     });
     contact.querySelector<HTMLButtonElement>('[data-copy]')?.addEventListener('click', async (e) => {
       const b = e.currentTarget as HTMLButtonElement;
