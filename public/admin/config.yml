@@ -182,4 +182,4 @@ collections:
             fields:
               - { name: title, label: Заголовок, widget: string }
               - { name: text, label: Текст, widget: text }
-              - { name: chips, label: "Кнопки-подсказки", widget: list }
+              - { name: chips, label: "Теги «Что нужно» в блоке связи (попадают в текст сообщения)", widget: list }

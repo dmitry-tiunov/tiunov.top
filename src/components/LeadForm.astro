@@ -1,10 +1,12 @@
 ---
 import site from '../data/site.json';
+import home from '../data/home.json';
 // Форма Яндекс Форм: данные хранятся в России (152-ФЗ). Ссылка вида https://forms.yandex.ru/u/<id>/
 const yaId = site.formEmbed?.match(/forms\.yandex\.ru\/(?:u|cloud)\/([\w-]+)/)?.[1];
 // Пока заявки не принимаются формой (нет formEmbed и formEndpoint), показываем кнопки «написать».
-// Текст для Telegram и письма собирается в скрипте ниже: чипсы «Что нужно» дописывают в него выбранное.
+// Текст для Telegram и письма собирается в скрипте ниже: теги «Что нужно» дописывают в него выбранное.
 const contactOnly = !yaId && !site.formEndpoint;
+const needs = home.final.chips;
 const greeting = 'Здравствуйте! Хочу бесплатный аудит бренда и сайта.';
 const tgHref = site.telegram && `https://t.me/${site.telegram}?text=${encodeURIComponent(greeting)}`;
 const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponent('Аудит бренда и сайта')}&body=${encodeURIComponent(greeting)}`;
@@ -12,13 +14,21 @@ const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponen
 <div id="zayavka" class="lead-form reveal" style="scroll-margin-top:80px">
     <div class="label">Бесплатно · ответ за 1 рабочий день</div>
     <h3 id="zayavka-h" style="margin-top:12px">Аудит вашего бренда и сайта</h3>
-    {contactOnly ? (
-      <p style="margin-top:12px;opacity:.8">Напишите, где вам удобно, и пришлите ссылку на сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
-    ) : (
-      <p style="margin-top:12px;opacity:.8">Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
+    <p style="margin-top:12px;opacity:.8">Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
+    {!yaId && needs.length > 0 && (
+      <fieldset class="needs">
+        <legend class="label">{contactOnly ? '1. ' : ''}Что нужно? Можно выбрать несколько</legend>
+        <div class="chips">
+          {needs.map((c) => <button type="button" data-chip={c} aria-pressed="false">{c}</button>)}
+        </div>
+        {contactOnly
+          ? <p class="msg-preview" aria-live="polite">Текст сообщения: «<span data-preview>{greeting}</span>»</p>
+          : <p class="msg-preview">Выбранное добавим в комментарий к заявке.</p>}
+      </fieldset>
     )}
     {contactOnly ? (
       <div class="contact" data-greeting={greeting}>
+        <div class="label step">2. Напишите, где вам удобно</div>
         <div class="contact-actions">
           {tgHref && <a class="btn primary" href={tgHref} data-tg={site.telegram} target="_blank" rel="noopener">Написать в Telegram</a>}
           {site.max && <a class="btn ghost" href={site.max} target="_blank" rel="noopener">Написать в MAX</a>}
@@ -70,21 +80,32 @@ const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponen
     }
   });
 
-  // Кнопки «написать»: чипсы «Что нужно» шлют событие lead:need, выбранное попадает в текст сообщения и письма.
+  // Теги «Что нужно»: нажатие выбирает, повторное снимает. Выбранное попадает
+  // в текст сообщения Telegram и письма (с предпросмотром) или в комментарий формы.
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('#zayavka [data-chip]')];
   const contact = document.querySelector<HTMLElement>('#zayavka .contact');
-  if (contact) {
-    const needs: string[] = [];
-    const tg = contact.querySelector<HTMLAnchorElement>('[data-tg]');
-    const mail = contact.querySelector<HTMLAnchorElement>('[data-mail]');
-    const update = () => {
+  const tg = contact?.querySelector<HTMLAnchorElement>('[data-tg]');
+  const mail = contact?.querySelector<HTMLAnchorElement>('[data-mail]');
+  const preview = document.querySelector<HTMLElement>('#zayavka [data-preview]');
+  chips.forEach((b) => b.addEventListener('click', () => {
+    const on = b.getAttribute('aria-pressed') !== 'true';
+    b.setAttribute('aria-pressed', String(on));
+    b.classList.toggle('on', on);
+    const needs = chips.filter((c) => c.classList.contains('on')).map((c) => c.dataset.chip!);
+    const comment = document.getElementById('f-msg') as HTMLTextAreaElement | null;
+    if (comment) {
+      // В форме выбранное держим первой строкой «Нужно: …», остальной текст не трогаем.
+      const rest = comment.value.replace(/^Нужно: [^\n]*\n?/, '');
+      comment.value = (needs.length ? `Нужно: ${needs.join(', ')}\n` : '') + rest;
+    }
+    if (contact) {
       const text = contact.dataset.greeting + (needs.length ? ` Нужно: ${needs.join(', ')}.` : '');
       if (tg) tg.href = `https://t.me/${tg.dataset.tg}?text=${encodeURIComponent(text)}`;
       if (mail) mail.href = `mailto:${mail.dataset.mail}?subject=${encodeURIComponent('Аудит бренда и сайта')}&body=${encodeURIComponent(text)}`;
-    };
-    document.addEventListener('lead:need', (e) => {
-      const need = (e as CustomEvent<string>).detail;
-      if (need && !needs.includes(need)) { needs.push(need); update(); }
-    });
+      if (preview) preview.textContent = text;
+    }
+  }));
+  if (contact) {
     contact.querySelector<HTMLButtonElement>('[data-copy]')?.addEventListener('click', async (e) => {
       const b = e.currentTarget as HTMLButtonElement;
       try { await navigator.clipboard.writeText(b.dataset.copy!); b.textContent = 'Скопировано'; }
