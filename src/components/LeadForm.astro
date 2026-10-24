@@ -2,12 +2,33 @@
 import site from '../data/site.json';
 // Форма Яндекс Форм: данные хранятся в России (152-ФЗ). Ссылка вида https://forms.yandex.ru/u/<id>/
 const yaId = site.formEmbed?.match(/forms\.yandex\.ru\/(?:u|cloud)\/([\w-]+)/)?.[1];
+// Пока заявки не принимаются формой (нет formEmbed и formEndpoint), показываем кнопки «написать».
+// Текст для Telegram и письма собирается в скрипте ниже: чипсы «Что нужно» дописывают в него выбранное.
+const contactOnly = !yaId && !site.formEndpoint;
+const greeting = 'Здравствуйте! Хочу бесплатный аудит бренда и сайта.';
+const tgHref = site.telegram && `https://t.me/${site.telegram}?text=${encodeURIComponent(greeting)}`;
+const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponent('Аудит бренда и сайта')}&body=${encodeURIComponent(greeting)}`;
 ---
 <div id="zayavka" class="lead-form reveal" style="scroll-margin-top:80px">
     <div class="label">Бесплатно · ответ за 1 рабочий день</div>
     <h3 id="zayavka-h" style="margin-top:12px">Аудит вашего бренда и сайта</h3>
-    <p style="margin-top:12px;opacity:.8">Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
-    {yaId ? (
+    {contactOnly ? (
+      <p style="margin-top:12px;opacity:.8">Напишите, где вам удобно, и пришлите ссылку на сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
+    ) : (
+      <p style="margin-top:12px;opacity:.8">Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
+    )}
+    {contactOnly ? (
+      <div class="contact" data-greeting={greeting}>
+        <div class="contact-actions">
+          {tgHref && <a class="btn primary" href={tgHref} data-tg={site.telegram} target="_blank" rel="noopener">Написать в Telegram</a>}
+          {site.max && <a class="btn ghost" href={site.max} target="_blank" rel="noopener">Написать в MAX</a>}
+          {mailHref && <a class="btn ghost" href={mailHref} data-mail={site.email}>Написать на почту</a>}
+        </div>
+        {site.email && (
+          <p class="contact-mail">Почта: <b>{site.email}</b> <button type="button" class="btn ghost sm" data-copy={site.email}>Скопировать</button></p>
+        )}
+      </div>
+    ) : yaId ? (
       <div class="ya-form"><iframe src={`https://forms.yandex.ru/u/${yaId}/?iframe=1&theme=dark`} name={`ya-form-${yaId}`} title="Форма заявки" loading="lazy" style="width:100%;min-height:640px;border:0"></iframe></div>
     ) : (
     <form id="lead" data-endpoint={site.formEndpoint} data-tg={site.telegram} data-phone={site.phone} novalidate>
@@ -48,4 +69,26 @@ const yaId = site.formEmbed?.match(/forms\.yandex\.ru\/(?:u|cloud)\/([\w-]+)/)?.
       msg.textContent = 'Не получилось отправить. Напишите в Telegram или позвоните.';
     }
   });
+
+  // Кнопки «написать»: чипсы «Что нужно» шлют событие lead:need, выбранное попадает в текст сообщения и письма.
+  const contact = document.querySelector<HTMLElement>('#zayavka .contact');
+  if (contact) {
+    const needs: string[] = [];
+    const tg = contact.querySelector<HTMLAnchorElement>('[data-tg]');
+    const mail = contact.querySelector<HTMLAnchorElement>('[data-mail]');
+    const update = () => {
+      const text = contact.dataset.greeting + (needs.length ? ` Нужно: ${needs.join(', ')}.` : '');
+      if (tg) tg.href = `https://t.me/${tg.dataset.tg}?text=${encodeURIComponent(text)}`;
+      if (mail) mail.href = `mailto:${mail.dataset.mail}?subject=${encodeURIComponent('Аудит бренда и сайта')}&body=${encodeURIComponent(text)}`;
+    };
+    document.addEventListener('lead:need', (e) => {
+      const need = (e as CustomEvent<string>).detail;
+      if (need && !needs.includes(need)) { needs.push(need); update(); }
+    });
+    contact.querySelector<HTMLButtonElement>('[data-copy]')?.addEventListener('click', async (e) => {
+      const b = e.currentTarget as HTMLButtonElement;
+      try { await navigator.clipboard.writeText(b.dataset.copy!); b.textContent = 'Скопировано'; }
+      catch { b.textContent = 'Не получилось, выделите адрес'; }
+    });
+  }
 </script>
