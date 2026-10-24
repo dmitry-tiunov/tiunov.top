@@ -12,14 +12,17 @@ import '@fontsource/inter/latin-700.css';
 import '../styles/global.css';
 import site from '../data/site.json';
 
-interface Props { title: string; description: string; noindex?: boolean; jsonld?: object }
-const { title, description, noindex = false, jsonld } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; jsonld?: object; image?: string }
+const { title, description, noindex = false, jsonld, image = '/og-default.png' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
 const org = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
   name: site.name,
   url: Astro.site?.href,
+  logo: new URL('/icon-512.png', Astro.site).href,
+  image: new URL('/og-default.png', Astro.site).href,
   telephone: site.phone,
   ...(site.email ? { email: site.email } : {}),
   sameAs: [site.telegram && `https://t.me/${site.telegram}`, site.behance, site.dprofile].filter(Boolean),
@@ -36,11 +39,19 @@ const org = {
   <meta name="description" content={description}>
   <link rel="canonical" href={canonical}>
   {noindex && <meta name="robots" content="noindex">}
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta name="theme-color" content="#000000">
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content={site.name}>
   <meta property="og:title" content={title}>
   <meta property="og:description" content={description}>
   <meta property="og:url" content={canonical}>
+  <meta property="og:image" content={ogImage}>
   <meta property="og:locale" content="ru_RU">
+  <meta name="twitter:card" content="summary_large_image">
   <script is:inline>document.documentElement.classList.add('js')</script>
   {site.yandexVerification && <meta name="yandex-verification" content={site.yandexVerification} />}
   {site.googleVerification && <meta name="google-site-verification" content={site.googleVerification} />}
@@ -69,7 +80,7 @@ const org = {
   {site.metrikaId && <noscript><div><img src={`https://mc.yandex.ru/watch/${site.metrikaId}`} style="position:absolute;left:-9999px" alt="" /></div></noscript>}
   <header class="top">
     <div class="wrap bar">
-      <a class="logo" href="/" aria-label="Design Tiunov, на главную"><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></a>
+      <a class="logo" href="/" aria-label="Design Tiunov, на главную"><img class="logo-mark" src="/mark.svg" alt="" width="481" height="430" /><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></a>
       <nav class="main" aria-label="Разделы">
         <a href="/#uslugi">Услуги</a>
         <a href="/kejsy/">Кейсы</a>
@@ -102,7 +113,7 @@ const org = {
     <div class="wrap">
       <div class="cols">
         <div class="about">
-          <a class="logo" href="/" aria-label="Design Tiunov, на главную"><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></a>
+          <a class="logo" href="/" aria-label="Design Tiunov, на главную"><img class="logo-mark" src="/mark.svg" alt="" width="481" height="430" /><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></a>
           <p>Фирменный стиль, сайты и носители для бизнеса. Работаем по всей России.</p>
         </div>
         <div><h4>Услуги</h4><ul>
