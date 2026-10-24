@@ -245,6 +245,8 @@ const links = [
   document.querySelectorAll<HTMLButtonElement>('[data-chip]').forEach((b) => b.addEventListener('click', () => {
     const msg = document.getElementById('f-msg') as HTMLTextAreaElement | null;
     if (msg && !msg.value.includes(b.dataset.chip!)) msg.value = (msg.value ? msg.value + ', ' : 'Нужно: ') + b.dataset.chip;
+    if (!msg) document.dispatchEvent(new CustomEvent('lead:need', { detail: b.dataset.chip }));
+    b.classList.add('on');
     document.getElementById('f-name')?.focus({ preventScroll: true });
     document.getElementById('zayavka')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }));

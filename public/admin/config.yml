@@ -88,6 +88,7 @@ collections:
           - { name: city, label: Город, widget: string }
           - { name: phone, label: Телефон, widget: string }
           - { name: telegram, label: "Telegram (без @)", widget: string }
+          - { name: max, label: "Ссылка на профиль в MAX (https://max.ru/…). Пусто — кнопки MAX нет", widget: string, required: false }
           - { name: email, label: Почта, widget: string }
           - { name: behance, label: "Ссылка на Behance", widget: string, required: false }
           - { name: dprofile, label: "Ссылка на Dprofile", widget: string, required: false }

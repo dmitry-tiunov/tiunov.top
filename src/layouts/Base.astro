@@ -52,11 +52,11 @@ const org = {
       (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
       ym(id, "init", { ssr: true, clickmap: true, trackLinks: true, accurateTrackBounce: true, webvisor: true, referrer: document.referrer, url: location.href });
       window.__ymId = id;
-      // Цели: клик в Telegram, звонок, почта, скачивание CV и портфолио
+      // Цели: клик в Telegram, MAX, звонок, почта, скачивание CV и портфолио
       document.addEventListener('click', function (e) {
         var a = e.target.closest && e.target.closest('a'); if (!a) return;
         var h = a.getAttribute('href') || '';
-        var goal = h.indexOf('t.me/') > -1 ? 'telegram' : h.indexOf('tel:') === 0 ? 'phone' : h.indexOf('mailto:') === 0 ? 'email' : a.hasAttribute('download') ? 'download' : '';
+        var goal = h.indexOf('t.me/') > -1 ? 'telegram' : h.indexOf('max.ru/') > -1 ? 'max' : h.indexOf('tel:') === 0 ? 'phone' : h.indexOf('mailto:') === 0 ? 'email' : a.hasAttribute('download') ? 'download' : '';
         if (goal) ym(id, 'reachGoal', goal);
       });
     </script>
