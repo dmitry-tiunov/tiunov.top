@@ -1,3 +1,4 @@
+logo_url: /favicon.svg
 backend:
   name: github
   repo: dmitry-tiunov/tiunov.top
