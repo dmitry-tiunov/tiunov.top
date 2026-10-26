@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import LeadForm from '../../components/LeadForm.astro';
+import Icon from '../../components/Icon.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { imageSize } from '../../lib/imageSize';
 import home from '../../data/home.json';
@@ -20,6 +21,7 @@ const others = (await getCollection('services', ({ data, id }) => !data.draft &&
 // Статьи, которые сами ссылаются на эту услугу: перелинковка без ручного списка
 const posts = (await getCollection('blog', ({ data, body }) => !data.draft && !!body?.includes(`/uslugi/${entry.id}/`))).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const url = new URL(`/uslugi/${entry.id}/`, Astro.site).href;
+const stepIcons = ['search', 'contract', 'layers', 'pen', 'send'] as const;
 const jsonld = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -96,7 +98,7 @@ const jsonld = {
 
   <section aria-labelledby="etapy-h">
     <div class="intro reveal"><span class="pill">Как работаем</span><h2 id="etapy-h">{home.stepsTitle}</h2></div>
-    <ol class="steps reveal">{home.steps.map((st) => <li><b>{st.title}</b><span>{st.text}</span></li>)}</ol>
+    <ol class="steps reveal">{home.steps.map((st, i) => <li><span class="ico"><Icon name={stepIcons[i % stepIcons.length]} /></span><b>{st.title}</b><span>{st.text}</span></li>)}</ol>
   </section>
 
   {cases.length > 0 && (

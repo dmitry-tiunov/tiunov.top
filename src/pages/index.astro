@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Packages from '../components/Packages.astro';
 import LeadForm from '../components/LeadForm.astro';
+import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import { sortCases } from '../lib/sortCases';
 import home from '../data/home.json';
@@ -20,13 +21,16 @@ const links = [
   site.cvUrl && { href: site.cvUrl, text: 'Скачать CV', download: true },
   site.portfolioUrl && { href: site.portfolioUrl, text: 'Скачать портфолио', download: true },
 ].filter(Boolean) as { href: string; text: string; primary?: boolean; download?: boolean }[];
+const stepIcons = ['search', 'contract', 'layers', 'pen', 'send'] as const;
+// Заголовок первого экрана в две строки: после запятой — серым
+const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', '); return i < 0 ? [home.hero.title, ''] : [home.hero.title.slice(0, i + 1), home.hero.title.slice(i + 2)]; })();
 ---
 <Base title={home.seoTitle} description={home.seoDescription}>
 <main>
 <div class="hero-full" id="top">
 <div class="wrap hero">
   <a class="badge reveal" href="#zayavka"><b>{home.hero.badgeTag}</b> {home.hero.badgeText} <i>→</i></a>
-  <h1 class="reveal">{home.hero.title}</h1>
+  <h1 class="reveal">{titleHead}{titleTail && <><br /><span class="dim">{titleTail}</span></>}</h1>
   <p class="lead reveal">{home.hero.lead}</p>
   <div class="cta reveal">
     <a class="btn primary" href="#zayavka">{home.hero.primary}</a>
@@ -67,6 +71,28 @@ const links = [
 </div>
 
 <div class="wrap">
+<section id="dlya-kogo" aria-labelledby="dlya-kogo-h">
+  <div class="intro reveal">
+    <span class="pill">Для кого</span>
+    <h2 id="dlya-kogo-h">Для компаний, которым нужен дизайн</h2>
+    <p>В основном это B2B: компании, которые продают другим компаниям.</p>
+  </div>
+  <div class="for-whom">
+    {[
+      { icon: 'building', title: 'Нет штатного дизайнера', text: 'Берём дизайн на себя: от логотипа до файлов для типографии.' },
+      { icon: 'users', title: 'Нужен дизайнер на аутсорс', text: 'Подключаемся к задачам, когда своих рук не хватает.' },
+      { icon: 'refresh', title: 'Пора обновить стиль', text: 'Делаем ребрендинг и сохраняем то, за что вас уже узнают.' },
+      { icon: 'rocket', title: 'Только выходите на рынок', text: 'Собираем знак, стиль и сайт к запуску.' },
+    ].map((w) => (
+      <div class="fw reveal">
+        <span class="ico"><Icon name={w.icon as 'building'} /></span>
+        <h3>{w.title}</h3>
+        <p>{w.text}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
 <section id="uslugi" aria-labelledby="uslugi-h">
   <div class="intro reveal">
     <span class="pill">{home.services.pill}</span>
@@ -110,29 +136,50 @@ const links = [
   </div>
   <div class="bento why">
     <div class="cell wide spotlight reveal">
-      <span class="label">Без цепочки менеджеров</span>
-      <div>
+      <div class="why-head"><span class="ico"><Icon name="user" /></span><span class="label">Без цепочки менеджеров</span></div>
+      <div class="mini" aria-hidden="true">
+        <div class="msg"><span class="ava">К</span><p>Можно поправить цвет на визитке?</p></div>
+        <div class="msg me"><img class="ava" src={home.about.photo} alt="" width="30" height="30" /><p>Да, пришлю сегодня</p></div>
+      </div>
+      <div class="why-text">
         <h3>Один ответственный</h3>
         <p>Вы общаетесь напрямую с Дмитрием: 13 лет в дизайне. Он ведёт проект от брифа до печати.</p>
       </div>
     </div>
     <div class="cell reveal">
-      <span class="label">Цена и срок</span>
-      <div>
+      <div class="why-head"><span class="ico"><Icon name="contract" /></span><span class="label">Цена и срок</span></div>
+      <div class="mini" aria-hidden="true">
+        <div class="row"><Icon name="check" class="ok" />Логотип<b>от 45&nbsp;000&nbsp;₽</b></div>
+        <div class="row"><Icon name="check" class="ok" />Срок<b>7–10 дней</b></div>
+        <div class="row"><Icon name="check" class="ok" />Правки<b>2 круга</b></div>
+      </div>
+      <div class="why-text">
         <h3>Всё в договоре</h3>
         <p>Логотип за 7–10 рабочих дней, от 45&nbsp;000&nbsp;₽. Два круга правок входят в цену.</p>
       </div>
     </div>
     <div class="cell reveal">
-      <span class="label">Результат</span>
-      <div>
+      <div class="why-head"><span class="ico"><Icon name="box" /></span><span class="label">Результат</span></div>
+      <div class="mini" aria-hidden="true">
+        <div class="row"><span class="fi"><Icon name="file" /></span><span class="fn"><strong>Брендбук.pdf</strong><small>для подрядчиков</small></span></div>
+        <div class="row"><span class="fi"><Icon name="file" /></span><span class="fn"><strong>Логотип.svg</strong><small>для сайта и соцсетей</small></span></div>
+        <div class="row"><span class="fi"><Icon name="file" /></span><span class="fn"><strong>Визитка.pdf</strong><small>для типографии</small></span></div>
+      </div>
+      <div class="why-text">
         <h3>Сразу готово к делу</h3>
         <p>Брендбук, файлы для типографии и сайт, который находят в Яндексе.</p>
       </div>
     </div>
     <div class="cell wide reveal">
-      <span class="label">Права</span>
-      <div>
+      <div class="why-head"><span class="ico"><Icon name="key" /></span><span class="label">Права</span></div>
+      <div class="mini formats" aria-hidden="true">
+        {[false, true].map((back) => (
+          <div class:list={['fmt-track', { back }]}>
+            {Array.from({ length: 4 }, () => ['AI', 'SVG', 'PDF', 'Figma']).flat().map((f) => <span class="fmt">{f}</span>)}
+          </div>
+        ))}
+      </div>
+      <div class="why-text">
         <h3>Всё остаётся вашим</h3>
         <p>Исходники в AI, SVG, PDF и Figma и исключительные права на знак передаём по договору.</p>
       </div>
@@ -189,7 +236,7 @@ const links = [
     <h2 id="etapy-h">{home.stepsTitle}</h2>
   </div>
   <ol class="steps reveal">
-    {home.steps.map((st) => <li><b>{st.title}</b><span>{st.text}</span></li>)}
+    {home.steps.map((st, i) => <li><span class="ico"><Icon name={stepIcons[i % stepIcons.length]} /></span><b>{st.title}</b><span>{st.text}</span></li>)}
   </ol>
 </section>
 
