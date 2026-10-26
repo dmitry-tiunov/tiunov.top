@@ -13,7 +13,7 @@
   --header-bg:rgba(0,0,0,.7); --shadow:rgba(0,0,0,.6); --chrome:#333333; --page-grad:#0b0b0b; --bar-strong:#ffffff;
   --logo-filter:none;
   --card-edge:inset 0 1px 20px rgba(255,255,255,.07),inset 0 0 0 1px rgba(255,255,255,.03);
-  --aur-1:rgba(45,212,191,.32); --aur-2:rgba(59,130,246,.42); --aur-3:rgba(99,102,241,.32); --beam-deep:rgba(29,78,216,.55); --beam-deep-2:rgba(14,116,144,.35); --beam-1:rgba(37,99,235,.75); --beam-2:rgba(34,211,238,.7); --beam-3:rgba(236,252,203,.85); --beam-4:rgba(255,255,255,.9); --beam-op:.75; --grid-line:rgba(255,255,255,.045);
+  --aur-1:rgba(45,212,191,.32); --aur-2:rgba(59,130,246,.42); --aur-3:rgba(99,102,241,.32); --beam-deep:rgba(29,78,216,.55); --beam-deep-2:rgba(14,116,144,.35); --beam-1:rgba(37,99,235,.75); --beam-2:rgba(34,211,238,.7); --beam-3:rgba(236,252,203,.85); --beam-4:rgba(255,255,255,.9); --beam-op:.75; --scrim:rgba(0,0,0,.62); --grid-line:rgba(255,255,255,.045);
   --soft-grad:radial-gradient(80% 90% at 12% 8%,rgba(45,212,191,.55),transparent 60%),radial-gradient(90% 100% at 90% 95%,rgba(99,102,241,.6),transparent 65%),linear-gradient(135deg,#1d4ed8,#0b1530);
   --g-violet:#6a4cf5; --g-magenta:#d44df0; --g-orange:#ff7a3d; --g-blue:#0099ff;
   --display:"Geist","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -34,7 +34,7 @@
   --header-bg:rgba(255,255,255,.78); --shadow:rgba(0,0,0,.12); --chrome:#c4c4c4; --page-grad:#f7f7f7; --bar-strong:#111111;
   --logo-filter:invert(1);
   --card-edge:inset 0 0 0 1px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);
-  --aur-1:rgba(45,212,191,.20); --aur-2:rgba(59,130,246,.16); --aur-3:rgba(139,92,246,.14); --beam-deep:rgba(96,165,250,.35); --beam-deep-2:rgba(45,212,191,.25); --beam-1:rgba(96,165,250,.55); --beam-2:rgba(103,232,249,.55); --beam-3:rgba(236,252,203,.8); --beam-4:rgba(255,255,255,.95); --beam-op:.7; --grid-line:rgba(16,24,40,.045);
+  --aur-1:rgba(45,212,191,.20); --aur-2:rgba(59,130,246,.16); --aur-3:rgba(139,92,246,.14); --beam-deep:rgba(96,165,250,.35); --beam-deep-2:rgba(45,212,191,.25); --beam-1:rgba(96,165,250,.55); --beam-2:rgba(103,232,249,.55); --beam-3:rgba(236,252,203,.8); --beam-4:rgba(255,255,255,.95); --beam-op:.7; --scrim:rgba(255,255,255,.6); --grid-line:rgba(16,24,40,.045);
   --soft-grad:radial-gradient(80% 90% at 12% 8%,rgba(56,189,248,.7),transparent 60%),radial-gradient(90% 100% at 90% 95%,rgba(129,140,248,.75),transparent 65%),linear-gradient(135deg,#2563eb,#3b5bdb);
 }
 *{box-sizing:border-box}
@@ -120,8 +120,10 @@ header.top .bar-end{justify-self:end;display:flex;align-items:center;gap:8px}
 .aurora i:nth-child(1){background:radial-gradient(60% 55% at 78% 22%,var(--beam-deep),transparent 70%),radial-gradient(45% 40% at 12% 85%,var(--beam-deep-2),transparent 70%);animation:glow 16s ease-in-out infinite alternate}
 .aurora i:nth-child(2){background:linear-gradient(118deg,transparent 34%,var(--beam-1) 42%,var(--beam-2) 47%,var(--beam-3) 50.5%,var(--beam-4) 52%,var(--beam-2) 56%,var(--beam-1) 62%,transparent 72%);filter:blur(38px);opacity:var(--beam-op);animation:sweep 13s ease-in-out infinite alternate}
 .aurora i:nth-child(3){background:linear-gradient(118deg,transparent 46%,var(--beam-2) 52%,var(--beam-4) 54%,var(--beam-1) 58%,transparent 66%);filter:blur(28px);opacity:calc(var(--beam-op) * .7);animation:sweep2 9s ease-in-out infinite alternate}
-/* за текстом лучи приглушены, чтобы заголовок и подзаголовок читались */
-.aurora{-webkit-mask-image:radial-gradient(46% 40% at 50% 55%,rgba(0,0,0,.28),#000 78%);mask-image:radial-gradient(46% 40% at 50% 55%,rgba(0,0,0,.28),#000 78%)}
+/* снизу лучи плавно растворяются в фоне, без резкого края */
+.aurora{-webkit-mask-image:linear-gradient(to bottom,#000 45%,transparent 100%);mask-image:linear-gradient(to bottom,#000 45%,transparent 100%)}
+/* за текстом лучи приглушены мягким пятном цвета фона, чтобы заголовок читался */
+.hero::before{content:"";position:absolute;inset:-10% -15%;z-index:-1;pointer-events:none;background:radial-gradient(50% 50% at 50% 50%,var(--scrim),transparent 72%)}
 @keyframes glow{to{transform:translate(-4%,3%) scale(1.06)}}
 @keyframes sweep{from{transform:translateX(-14%) rotate(-3deg)}to{transform:translateX(16%) rotate(4deg)}}
 @keyframes sweep2{from{transform:translateX(18%) rotate(5deg)}to{transform:translateX(-10%) rotate(-2deg)}}
