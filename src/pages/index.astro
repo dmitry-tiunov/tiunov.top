@@ -2,13 +2,15 @@
 import Base from '../layouts/Base.astro';
 import Packages from '../components/Packages.astro';
 import LeadForm from '../components/LeadForm.astro';
+import Icon from '../components/Icon.astro';
 import { getCollection } from 'astro:content';
 import { sortCases } from '../lib/sortCases';
 import home from '../data/home.json';
 import site from '../data/site.json';
 
 const allCases = sortCases(await getCollection('cases', ({ data }) => !data.draft));
-const cases = allCases;
+// На главной три первых кейса из «Порядка кейсов» в админке; остальные — на странице «Кейсы»
+const cases = allCases.slice(0, 3);
 // Лента в герое: обложки всех кейсов в случайном порядке, слотов 9–15 (кратно трём колонкам)
 const pool = allCases.map((c) => c.data.cover).filter(Boolean) as string[];
 const REEL = Math.min(15, Math.max(9, Math.ceil(pool.length / 3) * 3));
@@ -20,13 +22,17 @@ const links = [
   site.cvUrl && { href: site.cvUrl, text: 'Скачать CV', download: true },
   site.portfolioUrl && { href: site.portfolioUrl, text: 'Скачать портфолио', download: true },
 ].filter(Boolean) as { href: string; text: string; primary?: boolean; download?: boolean }[];
+const stepIcons = ['search', 'contract', 'layers', 'pen', 'send'] as const;
+// Заголовок первого экрана в две строки: после запятой — серым
+const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', '); return i < 0 ? [home.hero.title, ''] : [home.hero.title.slice(0, i + 1), home.hero.title.slice(i + 2)]; })();
 ---
 <Base title={home.seoTitle} description={home.seoDescription}>
 <main>
 <div class="hero-full" id="top">
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="wrap hero">
   <a class="badge reveal" href="#zayavka"><b>{home.hero.badgeTag}</b> {home.hero.badgeText} <i>→</i></a>
-  <h1 class="reveal">{home.hero.title}</h1>
+  <h1 class="reveal">{titleHead}{titleTail && <><br /><span class="dim">{titleTail}</span></>}</h1>
   <p class="lead reveal">{home.hero.lead}</p>
   <div class="cta reveal">
     <a class="btn primary" href="#zayavka">{home.hero.primary}</a>
@@ -67,105 +73,129 @@ const links = [
 </div>
 
 <div class="wrap">
+<section id="dlya-kogo" aria-labelledby="dlya-kogo-h">
+  <div class="intro reveal">
+    <span class="pill">Для кого</span>
+    <h2 id="dlya-kogo-h">Кому подходит</h2>
+    <p>В основном это компании, которые работают с бизнесом</p>
+  </div>
+  <div class="for-whom">
+    {[
+      { icon: 'building', title: 'Если нет своего дизайнера', text: 'Весь дизайн компании — без найма сотрудника в штат' },
+      { icon: 'users', title: 'Если нужна помощь со стороны', text: 'Подключение к задачам, когда в команде не хватает рук' },
+      { icon: 'refresh', title: 'Если пора обновить стиль', text: 'Новый образ с сохранением узнаваемости' },
+      { icon: 'rocket', title: 'Если компания только открывается', text: 'Знак, фирменный стиль и сайт к запуску' },
+    ].map((w) => (
+      <div class="fw reveal">
+        <span class="ico"><Icon name={w.icon as 'building'} /></span>
+        <h3>{w.title}</h3>
+        <p>{w.text}</p>
+      </div>
+    ))}
+  </div>
+</section>
+
 <section id="uslugi" aria-labelledby="uslugi-h">
   <div class="intro reveal">
     <span class="pill">{home.services.pill}</span>
     <h2 id="uslugi-h">{home.services.title}</h2>
     <p>{home.services.text}</p>
   </div>
-  {home.services.items.map((f) => (
-    <div class="feature">
-      <div class="copy reveal">
-        <span class="label">{f.label}</span>
-        <h3 style="margin-top:12px">{f.title}</h3>
-        <p>{f.text}</p>
-        {f.bullets?.length > 0 && <ul>{f.bullets.map((b) => <li>{b}</li>)}</ul>}
-        {f.linkText && <a class="link-arrow" href={f.linkUrl}>{f.linkText}</a>}
-      </div>
-      {f.browser ? (
-        <div class="shot reveal">
-          <div class="browser" aria-hidden="true">
-            <div class="chrome"><i></i><i></i><i></i><span>yourcompany.ru</span></div>
-            <div class="page">
-              <div class="bars"><span></span><span></span><span></span><span></span></div>
-              <b>{f.browserTitle}</b>
-              <div class="row">{f.images.slice(0, 3).map((src) => <div style={`background-image:url(${src})`}></div>)}</div>
+  <div class="do-grid">
+    {home.services.items.map((f) => (
+      <div class:list={['do-card', 'reveal', `do-${f.kind}`, { wide: f.kind === 'identity' }]}>
+        <div class="do-vis" aria-hidden="true">
+          {f.kind === 'identity' && (
+            <div class="flow">
+              <div class="st"><div class="tile mark"><img src={f.logo} alt="" /></div><span>Знак</span></div>
+              <i class="arr"></i>
+              <div class="st"><div class="tile pal">{f.colors?.map((c) => <b style={`background:${c}`}></b>)}<em>Аа</em></div><span>Цвета и шрифт</span></div>
+              <i class="arr"></i>
+              <div class="st"><div class="tile fan">{f.images.slice(0, 3).map((src) => <img src={src} alt="" loading="lazy" />)}</div><span>Все носители</span></div>
             </div>
-          </div>
+          )}
+          {f.kind === 'site' && (
+            <div class="browser">
+              <div class="chrome"><i></i><i></i><i></i><span>yourcompany.ru</span></div>
+              <div class="viewport"><div class="page scroll">
+                <div class="bars"><span></span><span></span><span></span><span></span></div>
+                <b>{f.browserTitle}</b>
+                <div class="row">{f.images.slice(0, 3).map((src) => <div style={`background-image:url(${src})`}></div>)}</div>
+                <div class="bars"><span></span><span></span></div>
+                <div class="row two">{f.images.slice(1, 4).slice(0, 2).map((src) => <div style={`background-image:url(${src})`}></div>)}</div>
+              </div></div>
+            </div>
+          )}
+          {f.kind === 'merch' && (
+            <div class="deck">{f.images.slice(0, 3).map((src) => <img src={src} alt="" loading="lazy" />)}</div>
+          )}
         </div>
-      ) : (
-        <div class:list={['shot', 'reveal', { duo: f.images.length > 1 }]}>
-          {f.images.slice(0, 2).map((src) => <img src={src} alt={`${f.label}: ${alt(src)}`} loading="lazy" />)}
+        <div class="do-copy">
+          <span class="label">{f.label}</span>
+          <h3>{f.title}</h3>
+          <p>{f.text}</p>
+          {f.linkText && f.linkUrl && <a class="link-arrow" href={f.linkUrl}>{f.linkText}</a>}
         </div>
-      )}
-    </div>
-  ))}
-  <div class="center"><a class="btn ghost" href="/uslugi/">Все услуги и цены</a></div>
+      </div>
+    ))}
+  </div>
+  <div class="center"><a class="btn accent" href="/uslugi/">Все услуги и цены</a></div>
 </section>
 
 <section aria-labelledby="pochemu-h">
   <div class="intro reveal">
-    <span class="pill">Почему с нами проще</span>
-    <h2 id="pochemu-h">Не просто логотип, а готовая система</h2>
+    <span class="pill">Подход</span>
+    <h2 id="pochemu-h">Почему это просто</h2>
   </div>
-  <div class="bento">
-    <div class="cell reveal">
-      <span class="label">Сроки</span>
-      <div class="big-num">7 <small>рабочих дней до логотипа</small></div>
-      <div class="ui">
-        <div class="timeline"><span class="on"></span><span class="on"></span><span class="on"></span><span></span><span></span></div>
-        <div class="kv">Аудит, смета, концепции <b>готово</b></div>
-      </div>
-    </div>
-    <div class="cell reveal">
-      <h3>Цена фиксируется в договоре</h3>
-      <p>Без почасовой оплаты и доплат за правки.</p>
-      <div class="ui">
-        <div class="kv">Пакет <b>Стиль и сайт</b></div>
-        <div class="kv">Круги правок <b>2 включены</b></div>
-        <div class="kv">Итого <b>от 140 000 ₽</b></div>
-        <div class="kv">Статус <span class="ok">ЗАФИКСИРОВАНО</span></div>
-      </div>
-    </div>
-    <div class="cell reveal">
-      <h3>Сайт, который любит Яндекс</h3>
-      <p>Быстрый, с микроразметкой и картой сайта.</p>
-      <div class="ui">
-        <div class="kv">Загрузка (LCP) <b>1,1 с</b></div>
-        <div class="kv">Отклик (INP) <b>80 мс</b></div>
-        <div class="kv">Скорость <span class="ok">ХОРОШО</span></div>
-      </div>
-    </div>
+  <div class="bento why">
     <div class="cell wide spotlight reveal">
-      <span class="label">Без цепочки менеджеров</span>
-      <h3>Вы общаетесь напрямую с дизайнером с 13-летним опытом</h3>
-      <table>
-        <thead><tr><th>Ориентир, рабочие дни</th><th class="num">Агентство</th><th class="num">Студия</th></tr></thead>
-        <tbody>
-          <tr><td>Логотип</td><td class="num">15–20</td><td class="num">7–10</td></tr>
-          <tr><td>Фирстиль и сайт</td><td class="num">40–60</td><td class="num">15–20</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="cell reveal">
-      <h3>Брендбук на каждый случай</h3>
-      <div class="ui">
-        <div class="swatches"><i style="background:#0099ff"></i><i style="background:#ff5a1f"></i><i style="background:#f3eadf"></i><i style="background:#171717;box-shadow:inset 0 0 0 1px #333"></i></div>
-        <div class="specimen"><b>Аа</b><span class="label">Шрифты, сетки, графика</span></div>
+      <div class="why-head"><span class="ico"><Icon name="user" /></span><span class="label">Без менеджеров</span></div>
+      <div class="mini" aria-hidden="true">
+        <div class="msg"><span class="ava">К</span><p>Можно поправить цвет на визитке?</p></div>
+        <div class="msg me"><img class="ava" src={home.about.avatar} alt="" width="30" height="30" /><p>Да, пришлю сегодня</p></div>
+      </div>
+      <div class="why-text">
+        <h3>Один ответственный</h3>
+        <p>Прямая связь с дизайнером: 13 лет опыта, от брифа до печати</p>
       </div>
     </div>
     <div class="cell reveal">
-      <h3>Готово к печати</h3>
-      <p>Файлы под типографию, подбор материалов, цветопроба.</p>
-      <div class="ui">
-        <div class="kv">Формат <b>PDF/X-1a, CMYK</b></div>
-        <div class="kv">Цветопроба <span class="ok">ПРИНЯТА</span></div>
+      <div class="why-head"><span class="ico"><Icon name="contract" /></span><span class="label">Цена и срок</span></div>
+      <div class="mini" aria-hidden="true">
+        <div class="row"><Icon name="check" class="ok" />Логотип<b>от 45&nbsp;000&nbsp;₽</b></div>
+        <div class="row"><Icon name="check" class="ok" />Срок<b>7–10 дней</b></div>
+        <div class="row"><Icon name="check" class="ok" />Правки<b>2 круга</b></div>
+      </div>
+      <div class="why-text">
+        <h3>Всё в договоре</h3>
+        <p>Логотип за 7–10 рабочих дней, от 45&nbsp;000&nbsp;₽, два круга правок в цене</p>
+      </div>
+    </div>
+    <div class="cell reveal">
+      <div class="why-head"><span class="ico"><Icon name="box" /></span><span class="label">Результат</span></div>
+      <div class="mini" aria-hidden="true">
+        <div class="row"><span class="fi"><Icon name="file" /></span><span class="fn"><strong>Брендбук.pdf</strong><small>для подрядчиков</small></span></div>
+        <div class="row"><span class="fi"><Icon name="file" /></span><span class="fn"><strong>Логотип.svg</strong><small>для сайта и соцсетей</small></span></div>
+        <div class="row"><span class="fi"><Icon name="file" /></span><span class="fn"><strong>Визитка.pdf</strong><small>для типографии</small></span></div>
+      </div>
+      <div class="why-text">
+        <h3>Сразу в работу</h3>
+        <p>Брендбук, файлы для типографии и сайт в Яндексе</p>
       </div>
     </div>
     <div class="cell wide reveal">
-      <h3>Права остаются у вас</h3>
-      <p>Исключительные права на знак и все материалы передаются по договору. Можно регистрировать товарный знак.</p>
-      <div class="ui"><div class="kv">Исходники <b>AI, SVG, PDF, Figma</b></div></div>
+      <div class="why-head"><span class="ico"><Icon name="key" /></span><span class="label">Права</span></div>
+      <div class="mini formats" aria-hidden="true">
+        {[false, true].map((back) => (
+          <div class:list={['fmt-track', { back }]}>
+            {Array.from({ length: 4 }, () => ['AI', 'SVG', 'PDF', 'Figma']).flat().map((f) => <span class="fmt">{f}</span>)}
+          </div>
+        ))}
+      </div>
+      <div class="why-text">
+        <h3>Всё ваше</h3>
+        <p>Исходники в AI, SVG, PDF и Figma и права на знак — по договору</p>
+      </div>
     </div>
   </div>
 </section>
@@ -178,27 +208,22 @@ const links = [
     <h2 id="kejsy-h">{home.casesTitle}</h2>
     <p>{home.casesText}</p>
   </div>
-  <div class="cases">
+  <div class="cases n3">
     {cases.map((c) => (
       <a class="case reveal" href={`/kejsy/${c.id}/`}>
-        {c.data.cover && <div class="cover"><img src={c.data.cover} alt={c.data.client} loading="lazy" /></div>}
+        {c.data.cover && <div class="cover"><img src={c.data.cover} alt={c.data.client} loading="lazy" />{c.data.isNew && <span class="is-new"><i></i>Новый</span>}</div>}
         <div class="tag">{c.data.tags.map((t) => <span>{t}</span>)}</div>
         <h3>{c.data.client}</h3>
         <p>{c.data.summary}</p>
       </a>
     ))}
   </div>
-  <div class="masonry reveal" style="margin-top:12px">
-    {home.gallery.map((src) => (
-      <figure><img src={src} alt={alt(src)} width="736" height="588" loading="lazy" /></figure>
-    ))}
-  </div>
-  <div class="center"><a class="btn ghost" href="/kejsy/">Все кейсы</a></div>
+  <div class="center"><a class="btn primary" href="/kejsy/">Смотреть все кейсы</a></div>
 </section>
 
 <section id="obo-mne" aria-labelledby="obo-mne-h">
   <div class="about-me">
-    <img class="reveal" src={home.about.photo} alt={home.about.title} width="983" height="1595" loading="lazy" />
+    <img class="reveal" src={home.about.photo} alt={home.about.title} width="1600" height="1200" loading="lazy" />
     <div class="reveal">
       <span class="pill">{home.about.pill}</span>
       <h2 id="obo-mne-h" style="margin-top:20px">{home.about.title}</h2>
@@ -219,7 +244,7 @@ const links = [
     <h2 id="etapy-h">{home.stepsTitle}</h2>
   </div>
   <ol class="steps reveal">
-    {home.steps.map((st) => <li><b>{st.title}</b><span>{st.text}</span></li>)}
+    {home.steps.map((st, i) => <li><span class="ico"><Icon name={stepIcons[i % stepIcons.length]} /></span><b>{st.title}</b><span>{st.text}</span></li>)}
   </ol>
 </section>
 
@@ -230,11 +255,7 @@ const links = [
   </div>
 </section>
 
-<section class="final" aria-labelledby="final-h">
-  <div class="reveal">
-    <h2 id="final-h">{home.final.title}</h2>
-    <p class="lead" style="margin:24px auto 0;color:var(--muted);font-size:19px">{home.final.text}</p>
-  </div>
+<section class="final" aria-labelledby="zayavka-h">
   <LeadForm />
 </section>
 </div>

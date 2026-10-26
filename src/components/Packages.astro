@@ -1,17 +1,11 @@
 ---
 import site from '../data/site.json';
+import PackageCard from './PackageCard.astro';
 ---
 <section id="pakety" style="scroll-margin-top:40px" aria-labelledby="pakety-h">
-  <div class="intro reveal"><span class="pill">Пакеты и цены</span><h2 id="pakety-h">Понятная цена до старта</h2><p>Цена фиксируется в договоре. Без почасовой оплаты и доплат за правки.</p></div>
+  <div class="intro reveal"><span class="pill">Пакеты и цены</span><h2 id="pakety-h">Понятная цена до старта</h2><p>Фиксированная цена, без почасовой оплаты и доплат за правки</p></div>
   <div class="packages">
-    {site.packages.map((p) => (
-      <article class:list={['pkg', 'reveal', { main: p.featured }]}>
-        <div class="label">{p.label}</div>
-        <h3>{p.title}</h3>
-        <div class="price">{p.price} <small>₽</small></div>
-        <ul>{p.items.map((i) => <li>{i}</li>)}</ul>
-        <div class="term">Срок: {p.term}</div>
-      </article>
-    ))}
+    {site.packages.map((p) => <PackageCard pkg={p} />)}
   </div>
+  <p class="pkg-note reveal">Нужно что-то между пакетами? <a class="link-arrow" href="#zayavka">Смета под задачу</a></p>
 </section>

@@ -4,41 +4,43 @@ import home from '../data/home.json';
 // Форма Яндекс Форм: данные хранятся в России (152-ФЗ). Ссылка вида https://forms.yandex.ru/u/<id>/
 const yaId = site.formEmbed?.match(/forms\.yandex\.ru\/(?:u|cloud)\/([\w-]+)/)?.[1];
 // Пока заявки не принимаются формой (нет formEmbed и formEndpoint), показываем кнопки «написать».
-// Текст для Telegram и письма собирается в скрипте ниже: теги «Что нужно» дописывают в него выбранное.
+// В этом режиме — просто две кнопки с готовым приветствием; теги «Что нужно» остаются только у формы заявки.
 const contactOnly = !yaId && !site.formEndpoint;
 const needs = home.final.chips;
 const greeting = 'Здравствуйте! Хочу бесплатный аудит бренда и сайта.';
 const tgHref = site.telegram && `https://t.me/${site.telegram}?text=${encodeURIComponent(greeting)}`;
 const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponent('Аудит бренда и сайта')}&body=${encodeURIComponent(greeting)}`;
 ---
-<div id="zayavka" class="lead-form reveal" style="scroll-margin-top:80px">
-    <div class="label">Бесплатно · ответ за 1 рабочий день</div>
-    <h3 id="zayavka-h" style="margin-top:12px">Аудит вашего бренда и сайта</h3>
-    <p style="margin-top:12px;opacity:.8">Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
-    {!yaId && needs.length > 0 && (
-      <fieldset class="needs">
-        <legend class="label">{contactOnly ? '1. ' : ''}Что нужно? Можно выбрать несколько</legend>
-        <div class="chips">
-          {needs.map((c) => <button type="button" data-chip={c} aria-pressed="false">{c}</button>)}
-        </div>
-        {contactOnly
-          ? <p class="msg-preview" aria-live="polite">Текст сообщения: «<span data-preview>{greeting}</span>»</p>
-          : <p class="msg-preview">Выбранное добавим в комментарий к заявке.</p>}
-      </fieldset>
-    )}
-    {contactOnly ? (
+<div id="zayavka" class:list={['lead-form', 'reveal', { simple: contactOnly }]} style="scroll-margin-top:80px">
+  <div class="lf-intro">
+    <span class="lf-badge"><i></i>Бесплатно · ответ за 1 рабочий день</span>
+    <h3 id="zayavka-h">Аудит бренда и сайта</h3>
+    <p>Ссылка на сайт — и через день список того, что мешает продажам, и смета</p>
+    {contactOnly && (
       <div class="contact" data-greeting={greeting}>
-        <div class="label step">2. Напишите, где вам удобно</div>
         <div class="contact-actions">
           {tgHref && <a class="btn primary" href={tgHref} data-tg={site.telegram} target="_blank" rel="noopener">Написать в Telegram</a>}
           {site.max && <a class="btn ghost" href={site.max} target="_blank" rel="noopener">Написать в MAX</a>}
           {mailHref && <a class="btn ghost" href={mailHref} data-mail={site.email}>Написать на почту</a>}
         </div>
-        {site.email && (
-          <p class="contact-mail">Почта: <b>{site.email}</b> <button type="button" class="btn ghost sm" data-copy={site.email}>Скопировать</button></p>
-        )}
       </div>
-    ) : yaId ? (
+    )}
+    <div class="lf-person">
+      <img src={home.about.avatar} alt="" width="48" height="48" loading="lazy" />
+      <div><b>Дмитрий Тиунов</b><span>Ответ в течение рабочего дня</span></div>
+    </div>
+  </div>
+  {!contactOnly && <div class="lf-act">
+    {!yaId && needs.length > 0 && (
+      <fieldset class="needs">
+        <legend class="label">Что нужно? Можно выбрать несколько</legend>
+        <div class="chips">
+          {needs.map((c) => <button type="button" data-chip={c} aria-pressed="false">{c}</button>)}
+        </div>
+        <p class="msg-preview">Выбранное добавим в комментарий к заявке.</p>
+      </fieldset>
+    )}
+    {yaId ? (
       <div class="ya-form"><iframe src={`https://forms.yandex.ru/u/${yaId}/?iframe=1&theme=dark`} name={`ya-form-${yaId}`} title="Форма заявки" loading="lazy" style="width:100%;min-height:640px;border:0"></iframe></div>
     ) : (
     <form id="lead" data-endpoint={site.formEndpoint} data-tg={site.telegram} data-phone={site.phone} novalidate>
@@ -54,6 +56,7 @@ const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponen
       </div>
     </form>
     )}
+  </div>}
 </div>
 {yaId && <script is:inline src="https://forms.yandex.ru/_static/embed.js"></script>}
 <script>

@@ -1,0 +1,52 @@
+name: Preview
+
+# Любая ветка, кроме main, выкладывается на https://preview.tiunov.top/.
+# Предпросмотр один: показывает последнюю отправленную ветку. Поисковикам закрыт.
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: preview
+  cancel-in-progress: true
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    env:
+      FTP_SERVER: ${{ secrets.FTP_SERVER }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Close preview from search engines
+        run: |
+          printf 'User-agent: *\nDisallow: /\n' > dist/robots.txt
+          rm -f dist/yandex_*.html
+          cat >> dist/.htaccess <<'EOF'
+          # Предпросмотр открывается только на своём поддомене, а не как tiunov.top/preview/
+          RewriteCond %{HTTP_HOST} !^preview\.tiunov\.top$ [NC]
+          RewriteRule ^ https://tiunov.top/ [L,R=302]
+          <IfModule mod_headers.c>
+            Header set X-Robots-Tag "noindex, nofollow"
+          </IfModule>
+          EOF
+          printf '%s\n%s\n' "${GITHUB_REF_NAME}" "${GITHUB_SHA}" > dist/preview.txt
+      - name: Upload preview via FTP
+        if: env.FTP_SERVER != ''
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          local-dir: ./dist/
+          server-dir: ${{ secrets.FTP_DIR }}preview/
+      - name: Summary
+        run: |
+          echo "Предпросмотр ветки **${GITHUB_REF_NAME}**: https://preview.tiunov.top/" >> "$GITHUB_STEP_SUMMARY"

@@ -1,20 +1,24 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection } from 'astro:content';
+import { thumb } from '../../lib/thumb';
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const fmt = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 <Base title="Блог о брендинге и сайтах | Тиунов / студия" description="Статьи о фирменном стиле, сайтах и рекламе для бизнеса: цены, сроки, как выбрать подрядчика.">
 <div class="wrap">
   <section>
-    <div class="head"><h1>Блог</h1></div>
-    {posts.length === 0 && <p>Скоро здесь появятся статьи.</p>}
-    <div class="list">
+    <div class="intro reveal"><span class="pill">Блог</span><h1 style="margin-top:20px;font-size:clamp(40px,6vw,76px)">Блог о дизайне для бизнеса</h1><p>Как устроены логотип, фирменный стиль и сайт и как к ним подготовиться.</p></div>
+    {posts.length === 0 && <p style="text-align:center">Скоро здесь появятся статьи.</p>}
+    <div class="post-list">
       {posts.map((p) => (
-        <a href={`/blog/${p.id}/`}>
-          <div class="label">{fmt.format(p.data.date)}</div>
-          <h3>{p.data.title}</h3>
-          <p style="color:var(--muted)">{p.data.description}</p>
+        <a class="post-row reveal" href={`/blog/${p.id}/`}>
+          {p.data.cover ? <img src={thumb(p.data.cover)} alt="" loading="lazy" /> : <span class="ph"></span>}
+          <span class="txt">
+            <span class="label">{fmt.format(p.data.date)}</span>
+            <h2>{p.data.title}</h2>
+            <span class="desc">{p.data.description}</span>
+          </span>
         </a>
       ))}
     </div>

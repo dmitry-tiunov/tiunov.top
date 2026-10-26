@@ -19,6 +19,7 @@ collections:
       - { name: title, label: "Заголовок (title)", widget: string }
       - { name: description, label: "Описание для поиска", widget: text }
       - { name: date, label: Дата, widget: datetime, format: "YYYY-MM-DD", time_format: false }
+      - { name: cover, label: "Обложка (4:3)", widget: image, required: false }
       - { name: draft, label: Черновик, widget: boolean, default: true }
       - { name: body, label: Текст, widget: markdown }
 
@@ -40,6 +41,7 @@ collections:
       - { name: cover, label: Обложка, widget: image, required: false }
       - { name: gallery, label: Галерея, widget: list, field: { name: image, label: Картинка, widget: image }, required: false }
       - { name: order, label: "Порядок (запасной, если кейса нет в списке «Порядок кейсов»)", widget: number, default: 100, required: false }
+      - { name: isNew, label: "Метка «Новый»", widget: boolean, default: false, required: false }
       - { name: draft, label: Черновик, widget: boolean, default: false }
       - { name: body, label: Текст, widget: markdown }
 
@@ -174,15 +176,16 @@ collections:
                 label: Блоки услуг
                 widget: list
                 fields:
+                  - { name: kind, label: "Картинка блока", widget: select, options: [ { label: "Знак → система (айдентика)", value: identity }, { label: "Макет сайта", value: site }, { label: "Веер фото (мерч)", value: merch } ] }
                   - { name: label, label: Метка, widget: string }
                   - { name: title, label: Заголовок, widget: string }
-                  - { name: text, label: Текст, widget: text }
-                  - { name: bullets, label: Пункты, widget: list, required: false }
+                  - { name: text, label: "Одна фраза", widget: string }
                   - { name: linkText, label: "Текст ссылки", widget: string, required: false }
                   - { name: linkUrl, label: "Адрес ссылки", widget: string, required: false }
-                  - { name: images, label: "Картинки (1 или 2; для макета сайта 3)", widget: list, field: { name: image, label: Картинка, widget: image } }
-                  - { name: browser, label: "Показать как макет сайта", widget: boolean, default: false }
+                  - { name: logo, label: "Знак (для айдентики, белый на прозрачном)", widget: image, required: false }
+                  - { name: colors, label: "Цвета (для айдентики, #RRGGBB)", widget: list, required: false }
                   - { name: browserTitle, label: "Заголовок в макете сайта", widget: string, required: false }
+                  - { name: images, label: "Картинки (айдентика: 3 носителя; сайт: 4; мерч: 3)", widget: list, field: { name: image, label: Картинка, widget: image } }
           - { name: casesTitle, label: "Кейсы: заголовок", widget: string }
           - { name: casesText, label: "Кейсы: подзаголовок", widget: text }
           - { name: gallery, label: "Витрина работ под кейсами", widget: list, field: { name: image, label: Картинка, widget: image } }
@@ -193,6 +196,7 @@ collections:
               - { name: pill, label: Метка, widget: string }
               - { name: title, label: Заголовок, widget: string }
               - { name: photo, label: Фото, widget: image }
+              - { name: avatar, label: "Аватарка (квадрат)", widget: image, required: false }
               - { name: text, label: "Абзацы", widget: list, field: { name: p, label: Абзац, widget: text } }
           - { name: stepsTitle, label: "Этапы: заголовок", widget: string }
           - name: steps

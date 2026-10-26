@@ -1,0 +1,18 @@
+---
+import { thumb } from '../lib/thumb';
+// Колонка рядом с текстом: список соседних материалов с миниатюрами (по образцу designfast)
+interface Item { href: string; title: string; image?: string; note?: string }
+interface Props { title: string; items: Item[] }
+const { title, items } = Astro.props;
+---
+{items.length > 0 && (
+  <nav class="side-list" aria-label={title}>
+    <div class="label">{title}</div>
+    {items.map((i) => (
+      <a href={i.href}>
+        {i.image ? <img src={thumb(i.image)} alt="" loading="lazy" /> : <span class="ph"></span>}
+        <span><b>{i.title}</b>{i.note && <small>{i.note}</small>}</span>
+      </a>
+    ))}
+  </nav>
+)}
