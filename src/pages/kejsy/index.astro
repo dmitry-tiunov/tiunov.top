@@ -11,7 +11,7 @@ const cases = sortCases(await getCollection('cases', ({ data }) => !data.draft))
     <div class="cases">
       {cases.map((c) => (
         <a class="case reveal" href={`/kejsy/${c.id}/`}>
-          {c.data.cover && <div class="cover"><img src={c.data.cover} alt={c.data.client} loading="lazy" /></div>}
+          {c.data.cover && <div class="cover"><img src={c.data.cover} alt={c.data.client} loading="lazy" />{c.data.isNew && <span class="is-new"><i></i>Новый</span>}</div>}
           <div class="tag">{c.data.tags.map((t) => <span>{t}</span>)}</div>
           <h3>{c.data.client}</h3>
           <p>{c.data.summary}</p>

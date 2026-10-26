@@ -41,6 +41,7 @@ collections:
       - { name: cover, label: Обложка, widget: image, required: false }
       - { name: gallery, label: Галерея, widget: list, field: { name: image, label: Картинка, widget: image }, required: false }
       - { name: order, label: "Порядок (запасной, если кейса нет в списке «Порядок кейсов»)", widget: number, default: 100, required: false }
+      - { name: isNew, label: "Метка «Новый»", widget: boolean, default: false, required: false }
       - { name: draft, label: Черновик, widget: boolean, default: false }
       - { name: body, label: Текст, widget: markdown }
 

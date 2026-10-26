@@ -13,7 +13,7 @@
   --header-bg:rgba(0,0,0,.7); --shadow:rgba(0,0,0,.6); --chrome:#333333; --page-grad:#0b0b0b; --bar-strong:#ffffff;
   --logo-filter:none;
   --card-edge:inset 0 1px 20px rgba(255,255,255,.07),inset 0 0 0 1px rgba(255,255,255,.03);
-  --aur-1:rgba(45,212,191,.20); --aur-2:rgba(59,130,246,.30); --aur-3:rgba(99,102,241,.20); --grid-line:rgba(255,255,255,.045);
+  --aur-1:rgba(45,212,191,.32); --aur-2:rgba(59,130,246,.42); --aur-3:rgba(99,102,241,.32); --grid-line:rgba(255,255,255,.045);
   --soft-grad:radial-gradient(80% 90% at 12% 8%,rgba(45,212,191,.55),transparent 60%),radial-gradient(90% 100% at 90% 95%,rgba(99,102,241,.6),transparent 65%),linear-gradient(135deg,#1d4ed8,#0b1530);
   --g-violet:#6a4cf5; --g-magenta:#d44df0; --g-orange:#ff7a3d; --g-blue:#0099ff;
   --display:"Geist","Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -88,6 +88,8 @@ header.top .bar-end{justify-self:end;display:flex;align-items:center;gap:8px}
 .mnav-foot .btn{flex:1 1 160px}
 .mnav-phone{flex-basis:100%;color:var(--muted);font:500 15px var(--body);margin-top:6px}
 .menu-open,.menu-open body{overflow:hidden}
+/* При открытом меню прокрутка страницы выключена, и sticky-шапка уезжала бы туда, где стоит в разметке: фиксируем её у верхнего края */
+.menu-open header.top{position:fixed;top:0;left:0;right:0}
 
 /* Кнопки и бейджи */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;font:500 15px var(--body);padding:10px 20px;border-radius:var(--r-pill);border:0;cursor:pointer;transition:transform .2s var(--ease),background .2s,opacity .2s;white-space:nowrap}
@@ -111,9 +113,15 @@ header.top .bar-end{justify-self:end;display:flex;align-items:center;gap:8px}
 /* Герой на весь экран: тексты по центру, внизу логотип во всю ширину */
 .hero-full{min-height:calc(100svh - 60px);display:flex;flex-direction:column;justify-content:center;padding-bottom:clamp(40px,8vh,96px);position:relative;isolation:isolate;overflow-x:clip}
 /* Мягкий градиент первого экрана (по мотивам nexra): три размытых пятна медленно дрейфуют */
-.hero-full::before{content:"";position:absolute;inset:-20% -10% -10%;z-index:-2;pointer-events:none;background:radial-gradient(38% 34% at 28% 32%,var(--aur-1),transparent 70%),radial-gradient(34% 38% at 74% 26%,var(--aur-2),transparent 70%),radial-gradient(46% 34% at 52% 78%,var(--aur-3),transparent 72%);filter:blur(50px);animation:aurora 24s ease-in-out infinite alternate}
+.aurora{position:absolute;inset:-15% -10% -5%;z-index:-2;pointer-events:none;filter:blur(60px)}
+.aurora i{position:absolute;width:48%;aspect-ratio:1;border-radius:50%;opacity:.95}
+.aurora i:nth-child(1){left:8%;top:6%;background:radial-gradient(circle,var(--aur-1),transparent 68%);animation:blob-a 14s ease-in-out infinite alternate}
+.aurora i:nth-child(2){right:4%;top:0;background:radial-gradient(circle,var(--aur-2),transparent 68%);animation:blob-b 18s ease-in-out infinite alternate}
+.aurora i:nth-child(3){left:28%;bottom:-6%;width:56%;background:radial-gradient(circle,var(--aur-3),transparent 68%);animation:blob-c 16s ease-in-out infinite alternate}
+@keyframes blob-a{to{transform:translate(22%,18%) scale(1.25)}}
+@keyframes blob-b{to{transform:translate(-26%,22%) scale(.85)}}
+@keyframes blob-c{to{transform:translate(14%,-24%) scale(1.2)}}
 .hero-full::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(60% 55% at 50% 45%,#000,transparent);mask-image:radial-gradient(60% 55% at 50% 45%,#000,transparent)}
-@keyframes aurora{0%{transform:translate3d(-4%,0,0) scale(1)}50%{transform:translate3d(4%,-3%,0) scale(1.08)}100%{transform:translate3d(-1%,4%,0) scale(1.03)}}
 .hero-full > .wrap{width:100%}
 
 /* Герой */
@@ -152,8 +160,7 @@ section{padding-block:var(--section) 0}
 /* Фичи: текст + большой визуал */
 /* «Что делаем»: крупные картинки-образы, текста минимум */
 .do-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.do-card{background:var(--surface-1);border-radius:var(--r-xxl);box-shadow:var(--card-edge);color:inherit;display:flex;flex-direction:column;overflow:hidden;transition:background .2s}
-.do-card:hover{text-decoration:none;background:var(--surface-2)}
+.do-card{background:var(--surface-1);border-radius:var(--r-xxl);box-shadow:var(--card-edge);color:inherit;display:flex;flex-direction:column;overflow:hidden}
 .do-card.wide{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);align-items:stretch}
 .do-card.wide .do-copy{order:-1;justify-content:flex-end}
 .do-vis{position:relative;min-height:340px;display:grid;place-items:center;padding:32px;overflow:hidden}
@@ -161,8 +168,7 @@ section{padding-block:var(--section) 0}
 .do-card.wide .do-copy{padding:32px}
 .do-copy h3{font-size:clamp(28px,3.2vw,44px);line-height:1.02;letter-spacing:-.045em}
 .do-copy p{color:var(--muted);font-size:17px}
-.do-copy .link-arrow{margin-top:8px}
-.do-card:hover .link-arrow::after{margin-left:4px}
+.do-copy .link-arrow{margin-top:8px;align-self:flex-start}
 /* знак → цвета → носители */
 .flow{display:flex;align-items:center;gap:clamp(8px,1.6vw,20px);width:100%;justify-content:center}
 .flow .st{display:grid;justify-items:center;gap:12px;flex:0 1 auto}
@@ -298,6 +304,11 @@ section{padding-block:var(--section) 0}
 .masonry .cap{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);color:#fff;font:500 13px var(--body);padding:6px 12px;border-radius:var(--r-pill);opacity:0;transform:translateY(6px);transition:.3s var(--ease)}
 .masonry a:hover .cap{opacity:1;transform:none}
 .center{text-align:center;margin-top:32px}
+/* Акцентная кнопка раздела: мягкий градиент, крупнее обычной */
+.btn.accent{background:var(--soft-grad);color:#fff;min-height:56px;padding:14px 30px;font-size:17px;box-shadow:0 14px 40px rgba(37,99,235,.35),inset 0 1px 12px rgba(255,255,255,.25)}
+.btn.accent:hover{opacity:.92}
+.btn.accent::after{content:"→";margin-left:4px;transition:transform .2s var(--ease)}
+.btn.accent:hover::after{transform:translateX(3px)}
 
 /* Пакеты */
 .packages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
@@ -333,6 +344,10 @@ section{padding-block:var(--section) 0}
 .case > :not(.cover){padding-inline:12px}
 a.case:hover{background:var(--surface-2);text-decoration:none}
 .case .cover{border-radius:var(--r-xl);overflow:hidden;aspect-ratio:4/3;background:var(--surface-2)}
+.cases.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.case .cover{position:relative}
+.is-new{position:absolute;top:12px;left:12px;display:inline-flex;align-items:center;gap:6px;font:500 12px var(--body);color:#111;background:#fff;padding:5px 10px;border-radius:var(--r-pill);box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.is-new i{width:7px;height:7px;border-radius:50%;background:#22c55e}
 .case .cover img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease)}
 a.case:hover .cover img{transform:scale(1.04)}
 .case .tag{display:flex;gap:6px;flex-wrap:wrap}
@@ -357,7 +372,6 @@ a.case:hover .tag span{background:var(--surface-3)}
 .steps li{list-style:none;padding:0 8px;text-align:center;counter-increment:s;position:relative}
 .steps .ico{width:64px;height:64px;margin:0 auto 20px;position:relative;z-index:1}
 .steps li:not(:last-child)::after{content:"";position:absolute;top:32px;left:calc(50% + 44px);right:calc(-50% + 38px);height:1px;background:linear-gradient(90deg,var(--hairline),var(--accent),var(--hairline));opacity:.7}
-.steps li b::before{content:"0" counter(s) " · ";color:var(--accent)}
 .steps li b{display:block;margin-bottom:6px;font:500 20px var(--display);letter-spacing:-.03em}
 .steps li > span:not(.ico){color:var(--muted);font-size:14px;display:block;max-width:24ch;margin:0 auto}
 /* Иконка в круге — общий элемент для этапов и карточек */
@@ -387,6 +401,17 @@ details p{margin-top:12px;color:var(--muted);font-size:16px;line-height:1.55}
 .lead-form::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(var(--grid-line) 1px,transparent 1px),linear-gradient(90deg,var(--grid-line) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:radial-gradient(70% 80% at 15% 20%,#000,transparent);mask-image:radial-gradient(70% 80% at 15% 20%,#000,transparent)}
 .lead-form p{color:var(--muted)}
 .lf-intro{display:flex;flex-direction:column;gap:16px}
+/* Пока заявки идут в мессенджер: одна колонка по центру, две кнопки */
+.lead-form.simple{display:block;max-width:760px;text-align:center}
+.lead-form.simple .lf-intro{align-items:center}
+.lead-form.simple .lf-badge{align-self:center}
+.lead-form.simple .lf-intro p{max-width:46ch}
+.lead-form.simple .contact-actions{justify-content:center;margin-top:12px}
+.lead-form.simple .contact-actions .btn{min-width:220px;min-height:52px;font-size:16px}
+.lead-form.simple .contact-actions .btn.ghost{background:var(--surface-2)}
+.lead-form.simple .lf-person{margin-top:12px;padding-top:0}
+.lead-form.simple::before{inset:-40% -10% 30% -10%}
+.lead-form.simple::after{-webkit-mask-image:radial-gradient(60% 70% at 50% 0%,#000,transparent);mask-image:radial-gradient(60% 70% at 50% 0%,#000,transparent)}
 .lf-intro h3{font-size:clamp(30px,3.4vw,46px);line-height:1.02;letter-spacing:-.045em}
 .lf-intro p{font-size:17px;line-height:1.45}
 .lf-badge{display:inline-flex;align-items:center;gap:8px;align-self:flex-start;font:500 13px var(--body);color:var(--ink);background:var(--surface-2);padding:6px 12px;border-radius:var(--r-pill);box-shadow:var(--card-edge)}
@@ -522,7 +547,7 @@ footer.site .legal{display:flex;justify-content:space-between;gap:16px;flex-wrap
   .flow .st{gap:8px;max-width:22vw}
   .flow .st span{font-size:12px;white-space:normal;text-align:center;line-height:1.2}
   .do-copy{padding:0 24px 28px}
-  .packages,.cases{grid-template-columns:1fr}
+  .packages,.cases,.cases.n3{grid-template-columns:1fr}
   .gallery,.g-row{gap:8px}
   .steps{grid-template-columns:1fr 1fr}
   form{grid-template-columns:1fr}
@@ -551,7 +576,7 @@ footer.site .legal{display:flex;justify-content:space-between;gap:16px;flex-wrap
   .lf-badge i{animation:none}
   .do-site .page.scroll{animation:none}
   .js .do-identity .flow .st,.js .do-identity .flow .arr{opacity:1;transform:none;transition:none}
-  .hero-full::before{animation:none}
+  .aurora i{animation:none}
   .js .why .mini > *{opacity:1;transform:none;transition:none}
   .fmt-track{animation:none}
   *{transition:none!important;animation:none!important}

@@ -9,7 +9,8 @@ import home from '../data/home.json';
 import site from '../data/site.json';
 
 const allCases = sortCases(await getCollection('cases', ({ data }) => !data.draft));
-const cases = allCases;
+// На главной три первых кейса из «Порядка кейсов» в админке; остальные — на странице «Кейсы»
+const cases = allCases.slice(0, 3);
 // Лента в герое: обложки всех кейсов в случайном порядке, слотов 9–15 (кратно трём колонкам)
 const pool = allCases.map((c) => c.data.cover).filter(Boolean) as string[];
 const REEL = Math.min(15, Math.max(9, Math.ceil(pool.length / 3) * 3));
@@ -28,6 +29,7 @@ const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', ');
 <Base title={home.seoTitle} description={home.seoDescription}>
 <main>
 <div class="hero-full" id="top">
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
 <div class="wrap hero">
   <a class="badge reveal" href="#zayavka"><b>{home.hero.badgeTag}</b> {home.hero.badgeText} <i>→</i></a>
   <h1 class="reveal">{titleHead}{titleTail && <><br /><span class="dim">{titleTail}</span></>}</h1>
@@ -101,7 +103,7 @@ const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', ');
   </div>
   <div class="do-grid">
     {home.services.items.map((f) => (
-      <a class:list={['do-card', 'reveal', `do-${f.kind}`, { wide: f.kind === 'identity' }]} href={f.linkUrl || '/uslugi/'}>
+      <div class:list={['do-card', 'reveal', `do-${f.kind}`, { wide: f.kind === 'identity' }]}>
         <div class="do-vis" aria-hidden="true">
           {f.kind === 'identity' && (
             <div class="flow">
@@ -132,12 +134,12 @@ const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', ');
           <span class="label">{f.label}</span>
           <h3>{f.title}</h3>
           <p>{f.text}</p>
-          {f.linkText && <span class="link-arrow">{f.linkText}</span>}
+          {f.linkText && f.linkUrl && <a class="link-arrow" href={f.linkUrl}>{f.linkText}</a>}
         </div>
-      </a>
+      </div>
     ))}
   </div>
-  <div class="center"><a class="btn primary" href="/uslugi/">Все услуги и цены</a></div>
+  <div class="center"><a class="btn accent" href="/uslugi/">Все услуги и цены</a></div>
 </section>
 
 <section aria-labelledby="pochemu-h">
@@ -206,22 +208,17 @@ const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', ');
     <h2 id="kejsy-h">{home.casesTitle}</h2>
     <p>{home.casesText}</p>
   </div>
-  <div class="cases">
+  <div class="cases n3">
     {cases.map((c) => (
       <a class="case reveal" href={`/kejsy/${c.id}/`}>
-        {c.data.cover && <div class="cover"><img src={c.data.cover} alt={c.data.client} loading="lazy" /></div>}
+        {c.data.cover && <div class="cover"><img src={c.data.cover} alt={c.data.client} loading="lazy" />{c.data.isNew && <span class="is-new"><i></i>Новый</span>}</div>}
         <div class="tag">{c.data.tags.map((t) => <span>{t}</span>)}</div>
         <h3>{c.data.client}</h3>
         <p>{c.data.summary}</p>
       </a>
     ))}
   </div>
-  <div class="masonry reveal" style="margin-top:12px">
-    {home.gallery.map((src) => (
-      <figure><img src={src} alt={alt(src)} width="736" height="588" loading="lazy" /></figure>
-    ))}
-  </div>
-  <div class="center"><a class="btn ghost" href="/kejsy/">Все кейсы</a></div>
+  <div class="center"><a class="btn primary" href="/kejsy/">Смотреть все кейсы</a></div>
 </section>
 
 <section id="obo-mne" aria-labelledby="obo-mne-h">
@@ -258,11 +255,7 @@ const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', ');
   </div>
 </section>
 
-<section class="final" aria-labelledby="final-h">
-  <div class="reveal">
-    <h2 id="final-h">{home.final.title}</h2>
-    <p class="lead" style="margin:24px auto 0;color:var(--muted);font-size:19px">{home.final.text}</p>
-  </div>
+<section class="final" aria-labelledby="zayavka-h">
   <LeadForm />
 </section>
 </div>
