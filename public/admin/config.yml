@@ -43,6 +43,35 @@ collections:
       - { name: draft, label: Черновик, widget: boolean, default: false }
       - { name: body, label: Текст, widget: markdown }
 
+  - name: services
+    label: Услуги
+    label_singular: Услуга
+    folder: src/content/services
+    create: true
+    slug: "{{slug}}"
+    identifier_field: name
+    summary: "{{name}}"
+    thumbnail: cover
+    fields:
+      - { name: name, label: "Название услуги", widget: string }
+      - { name: label, label: "Метка над заголовком", widget: string }
+      - { name: title, label: "Заголовок для поиска (title)", widget: string }
+      - { name: description, label: "Описание для поиска", widget: text }
+      - { name: h1, label: "Заголовок страницы (H1)", widget: string }
+      - { name: lead, label: "Подзаголовок", widget: text }
+      - { name: price, label: "Цена «от», число (для поисковиков)", widget: number }
+      - { name: priceText, label: "Цена, как показать на сайте", widget: string }
+      - { name: term, label: Срок, widget: string }
+      - { name: cover, label: Обложка, widget: image }
+      - { name: coverAlt, label: "Описание обложки (alt)", widget: string }
+      - { name: includes, label: "Что входит", widget: list }
+      - { name: packages, label: "Пакеты (названия из «Контакты и пакеты»)", widget: list }
+      - { name: cases, label: Кейсы, widget: list, field: { name: slug, label: Кейс, widget: relation, collection: cases, value_field: "{{slug}}", search_fields: [client], display_fields: [client] } }
+      - { name: faq, label: "Частые вопросы", widget: list, fields: [ { name: q, label: Вопрос, widget: string }, { name: a, label: Ответ, widget: text } ] }
+      - { name: order, label: "Порядок", widget: number, default: 100 }
+      - { name: draft, label: Черновик, widget: boolean, default: false }
+      - { name: body, label: Текст, widget: markdown }
+
   - name: cities
     label: Города
     label_singular: Город
@@ -93,6 +122,7 @@ collections:
           - { name: email, label: Почта, widget: string }
           - { name: behance, label: "Ссылка на Behance", widget: string, required: false }
           - { name: dprofile, label: "Ссылка на Dprofile", widget: string, required: false }
+          - { name: yandexMaps, label: "Ссылка на организацию в Яндекс Картах", widget: string, required: false }
           - { name: cvUrl, label: "Файл CV (PDF)", widget: file, required: false }
           - { name: portfolioUrl, label: "Файл портфолио (PDF)", widget: file, required: false }
           - { name: metrikaId, label: "Номер счётчика Яндекс Метрики", widget: string, required: false }
