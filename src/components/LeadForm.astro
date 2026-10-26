@@ -14,8 +14,8 @@ const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponen
 <div id="zayavka" class:list={['lead-form', 'reveal', { simple: contactOnly }]} style="scroll-margin-top:80px">
   <div class="lf-intro">
     <span class="lf-badge"><i></i>Бесплатно · ответ за 1 рабочий день</span>
-    <h3 id="zayavka-h">Аудит вашего бренда и сайта</h3>
-    <p>Пришлите сайт компании. Вернёмся со списком того, что мешает продажам, и сметой.</p>
+    <h3 id="zayavka-h">Аудит бренда и сайта</h3>
+    <p>Ссылка на сайт — и через день список того, что мешает продажам, и смета.</p>
     {contactOnly && (
       <div class="contact" data-greeting={greeting}>
         <div class="contact-actions">
@@ -27,7 +27,7 @@ const mailHref = site.email && `mailto:${site.email}?subject=${encodeURIComponen
     )}
     <div class="lf-person">
       <img src={home.about.photo} alt="" width="48" height="48" loading="lazy" />
-      <div><b>Дмитрий Тиунов</b><span>Отвечает лично</span></div>
+      <div><b>Дмитрий Тиунов</b><span>Основатель, отвечает сам</span></div>
     </div>
   </div>
   {!contactOnly && <div class="lf-act">

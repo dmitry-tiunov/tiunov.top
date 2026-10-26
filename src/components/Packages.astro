@@ -3,9 +3,9 @@ import site from '../data/site.json';
 import PackageCard from './PackageCard.astro';
 ---
 <section id="pakety" style="scroll-margin-top:40px" aria-labelledby="pakety-h">
-  <div class="intro reveal"><span class="pill">Пакеты и цены</span><h2 id="pakety-h">Понятная цена до старта</h2><p>Цена фиксируется в договоре. Без почасовой оплаты и доплат за правки.</p></div>
+  <div class="intro reveal"><span class="pill">Пакеты и цены</span><h2 id="pakety-h">Понятная цена до старта</h2><p>Фиксированная цена. Без почасовой оплаты и доплат за правки.</p></div>
   <div class="packages">
     {site.packages.map((p) => <PackageCard pkg={p} />)}
   </div>
-  <p class="pkg-note reveal">Нужно что-то между пакетами? <a class="link-arrow" href="#zayavka">Соберём смету под задачу</a></p>
+  <p class="pkg-note reveal">Нужно что-то между пакетами? <a class="link-arrow" href="#zayavka">Смета под задачу</a></p>
 </section>
