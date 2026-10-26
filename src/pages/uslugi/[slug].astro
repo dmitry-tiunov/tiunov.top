@@ -17,6 +17,8 @@ const coverSize = imageSize(d.cover);
 const packages = d.packages.map((t) => site.packages.find((p) => p.title === t)).filter(Boolean) as typeof site.packages;
 const cases = (await Promise.all(d.cases.map((id) => getEntry('cases', id)))).filter((c) => c && !c.data.draft);
 const others = (await getCollection('services', ({ data, id }) => !data.draft && id !== entry.id)).sort((a, b) => a.data.order - b.data.order);
+// Статьи, которые сами ссылаются на эту услугу: перелинковка без ручного списка
+const posts = (await getCollection('blog', ({ data, body }) => !data.draft && !!body?.includes(`/uslugi/${entry.id}/`))).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const url = new URL(`/uslugi/${entry.id}/`, Astro.site).href;
 const jsonld = {
   '@context': 'https://schema.org',
@@ -117,6 +119,20 @@ const jsonld = {
     <section aria-labelledby="voprosy-h">
       <div class="intro reveal"><span class="pill">Вопросы</span><h2 id="voprosy-h">Частые вопросы</h2></div>
       <div class="faq reveal">{d.faq.map((x) => <details><summary>{x.q}</summary><p>{x.a}</p></details>)}</div>
+    </section>
+  )}
+
+  {posts.length > 0 && (
+    <section aria-labelledby="stati-h">
+      <div class="intro reveal"><span class="pill">Блог</span><h2 id="stati-h">Статьи по теме</h2></div>
+      <div class="list reveal">
+        {posts.map((p) => (
+          <a href={`/blog/${p.id}/`}>
+            <h3>{p.data.title}</h3>
+            <p style="color:var(--muted)">{p.data.description}</p>
+          </a>
+        ))}
+      </div>
     </section>
   )}
 
