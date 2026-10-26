@@ -12,3 +12,4 @@ ErrorDocument 404 /404.html
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
 </IfModule>
+AddType application/manifest+json .webmanifest
