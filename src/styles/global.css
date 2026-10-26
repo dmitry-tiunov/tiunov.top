@@ -370,6 +370,8 @@ a.case:hover .tag span{background:var(--surface-3)}
 /* Обо мне */
 .about-me{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(28px,5vw,80px);align-items:center}
 .about-me > img{border-radius:var(--r-xxl);width:100%;aspect-ratio:4/3;object-fit:cover;object-position:50% 35%}
+/* фото на белом фоне: в светлой теме рамка и тень, чтобы не сливалось со страницей */
+:root[data-theme="light"] .about-me > img{box-shadow:0 0 0 1px var(--hairline),0 12px 40px rgba(0,0,0,.08)}
 .about-me p{color:var(--text);font-size:clamp(17px,1.5vw,20px);line-height:1.5;margin-top:20px;max-width:44ch}
 .about-me .links{display:flex;gap:10px;flex-wrap:wrap;margin-top:36px}
 
