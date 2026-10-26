@@ -3,7 +3,7 @@ import site from '../data/site.json';
 import PackageCard from './PackageCard.astro';
 ---
 <section id="pakety" style="scroll-margin-top:40px" aria-labelledby="pakety-h">
-  <div class="intro reveal"><span class="pill">Пакеты и цены</span><h2 id="pakety-h">Понятная цена до старта</h2><p>Фиксированная цена. Без почасовой оплаты и доплат за правки.</p></div>
+  <div class="intro reveal"><span class="pill">Пакеты и цены</span><h2 id="pakety-h">Понятная цена до старта</h2><p>Фиксированная цена, без почасовой оплаты и доплат за правки</p></div>
   <div class="packages">
     {site.packages.map((p) => <PackageCard pkg={p} />)}
   </div>
