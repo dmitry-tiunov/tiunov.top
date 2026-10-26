@@ -1,0 +1,54 @@
+---
+import Base from '../../layouts/Base.astro';
+import Packages from '../../components/Packages.astro';
+import LeadForm from '../../components/LeadForm.astro';
+import { getCollection } from 'astro:content';
+import { imageSize } from '../../lib/imageSize';
+import site from '../../data/site.json';
+
+const services = (await getCollection('services', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const jsonld = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Главная', item: Astro.site?.href },
+    { '@type': 'ListItem', position: 2, name: 'Услуги', item: new URL('/uslugi/', Astro.site).href },
+  ],
+};
+---
+<Base title="Услуги: логотип, фирменный стиль, брендбук | Тиунов / студия" description="Разработка логотипа, фирменного стиля и брендбука для бизнеса, а также сайты, оформление транспорта и мерч. Пакеты с фиксированной ценой от 45 000 ₽." jsonld={jsonld}>
+<main class="wrap">
+  <section class="svc-index" aria-labelledby="uslugi-h">
+    <span class="pill">Услуги</span>
+    <h1 id="uslugi-h">Услуги студии</h1>
+    <p class="lead">Логотип, фирменный стиль, брендбук, сайт и носители. Фиксированная цена и срок, один ответственный от брифа до печати. Работаем с компаниями из любых городов России.</p>
+  </section>
+
+  <div class="svc-cards big">
+    {services.map((s) => {
+      const size = imageSize(s.data.cover);
+      return (
+        <a class="svc-card reveal" href={`/uslugi/${s.id}/`}>
+          <div class="cover"><img src={s.data.cover} alt={s.data.coverAlt} width={size?.w} height={size?.h} loading="lazy" /></div>
+          <span class="label">{s.data.label}</span>
+          <h2>{s.data.name}</h2>
+          <p>{s.data.lead}</p>
+          <span class="price">{s.data.priceText} · {s.data.term}</span>
+        </a>
+      );
+    })}
+  </div>
+
+  <section aria-labelledby="takzhe-h">
+    <div class="intro reveal"><span class="pill">Также делаем</span><h2 id="takzhe-h">Сайты и носители</h2></div>
+    <ul class="incl reveal">
+      <li><b>Сайты.</b> Лендинг, сайт-визитка или каталог продукции в фирменном стиле: страницы под услуги, Вебмастер, Метрика и цели, админка, чтобы менять тексты самим. Входят в пакеты «Стиль и сайт» и «Бренд в работе».</li>
+      <li><b>Транспорт и наружная реклама.</b> Дизайн оформления машин, вывесок, билбордов и табличек. Графику проверяем на реальных размерах и готовим файлы под вашего подрядчика.</li>
+      <li><b>Мерч и POS.</b> Спецодежда, худи, футболки, кружки, пакеты, стенды и раздатка в фирменном стиле.</li>
+    </ul>
+  </section>
+
+  <Packages />
+  <section class="final"><LeadForm /></section>
+</main>
+</Base>

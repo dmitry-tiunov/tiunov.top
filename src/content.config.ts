@@ -30,4 +30,25 @@ const cities = defineCollection({
   schema: z.object({ ...seo, city: z.string(), cityIn: z.string() }),
 });
 
-export const collections = { blog, cases, cities };
+const services = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/services' }),
+  schema: z.object({
+    ...seo,
+    name: z.string(),
+    label: z.string(),
+    h1: z.string(),
+    lead: z.string(),
+    price: z.number(),
+    priceText: z.string(),
+    term: z.string(),
+    cover: z.string(),
+    coverAlt: z.string(),
+    includes: z.array(z.string()).default([]),
+    packages: z.array(z.string()).default([]),
+    cases: z.array(z.string()).default([]),
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
+    order: z.number().default(100),
+  }),
+});
+
+export const collections = { blog, cases, cities, services };

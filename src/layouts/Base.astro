@@ -25,7 +25,7 @@ const org = {
   image: new URL('/og-default.png', Astro.site).href,
   telephone: site.phone,
   ...(site.email ? { email: site.email } : {}),
-  sameAs: [site.telegram && `https://t.me/${site.telegram}`, site.behance, site.dprofile].filter(Boolean),
+  sameAs: [site.telegram && `https://t.me/${site.telegram}`, site.behance, site.dprofile, site.yandexMaps].filter(Boolean),
   address: { '@type': 'PostalAddress', addressLocality: site.city, addressCountry: 'RU' },
   areaServed: 'RU',
 };
@@ -82,7 +82,7 @@ const org = {
     <div class="wrap bar">
       <a class="logo" href="/" aria-label="Design Tiunov, на главную"><img class="logo-mark" src="/mark.svg" alt="" width="481" height="430" /><img src="/logo.svg" alt="Design Tiunov" width="1349" height="98" /></a>
       <nav class="main" aria-label="Разделы">
-        <a href="/#uslugi">Услуги</a>
+        <a href="/uslugi/">Услуги</a>
         <a href="/kejsy/">Кейсы</a>
         <a href="/#pakety">Цены</a>
         <a href="/obo-mne/">Обо мне</a>
@@ -95,7 +95,7 @@ const org = {
     </div>
     <div class="mnav" id="mnav" hidden>
       <nav class="wrap" aria-label="Меню">
-        <a href="/#uslugi">Услуги</a>
+        <a href="/uslugi/">Услуги</a>
         <a href="/kejsy/">Кейсы</a>
         <a href="/#pakety">Цены</a>
         <a href="/obo-mne/">Обо мне</a>
@@ -117,10 +117,10 @@ const org = {
           <p>Фирменный стиль, сайты и носители для бизнеса. Работаем по всей России.</p>
         </div>
         <div><h4>Услуги</h4><ul>
-          <li><a href="/#uslugi">Айдентика и брендбук</a></li>
-          <li><a href="/#uslugi">Сайты</a></li>
-          <li><a href="/#uslugi">Транспорт и вывески</a></li>
-          <li><a href="/#uslugi">Мерч и POS</a></li>
+          <li><a href="/uslugi/razrabotka-logotipa/">Разработка логотипа</a></li>
+          <li><a href="/uslugi/firmennyj-stil/">Фирменный стиль</a></li>
+          <li><a href="/uslugi/brendbuk/">Брендбук</a></li>
+          <li><a href="/uslugi/">Сайты, транспорт, мерч</a></li>
         </ul></div>
         <div><h4>Студия</h4><ul>
           <li><a href="/obo-mne/">Обо мне</a></li>
@@ -135,6 +135,7 @@ const org = {
           {site.email && <li><a href={`mailto:${site.email}`}>{site.email}</a></li>}
           {site.behance && <li><a href={site.behance} target="_blank" rel="noopener">Behance</a></li>}
           {site.dprofile && <li><a href={site.dprofile} target="_blank" rel="noopener">Dprofile</a></li>}
+          {site.yandexMaps && <li><a href={site.yandexMaps} target="_blank" rel="noopener">Яндекс Карты</a></li>}
           {site.cvUrl && <li><a href={site.cvUrl} download>Скачать CV</a></li>}
           {site.portfolioUrl && <li><a href={site.portfolioUrl} download>Скачать портфолио</a></li>}
           <li><a href="/#zayavka">Оставить заявку</a></li>
