@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import LeadForm from '../../components/LeadForm.astro';
 import Icon from '../../components/Icon.astro';
+import PackageCard from '../../components/PackageCard.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 import { imageSize } from '../../lib/imageSize';
 import home from '../../data/home.json';
@@ -83,15 +84,7 @@ const jsonld = {
     <section aria-labelledby="ceny-h">
       <div class="intro reveal"><span class="pill">Цена и сроки</span><h2 id="ceny-h">Цена фиксируется в договоре</h2><p>Без почасовой оплаты и доплат за правки. Точную сумму называем после бесплатного аудита.</p></div>
       <div class:list={['packages', { n2: packages.length === 2 }]}>
-        {packages.map((p) => (
-          <article class:list={['pkg', 'reveal', { main: p.featured }]}>
-            <div class="label">{p.label}</div>
-            <h3>{p.title}</h3>
-            <div class="price">{p.price} <small>₽</small></div>
-            <ul>{p.items.map((i) => <li>{i}</li>)}</ul>
-            <div class="term">Срок: {p.term}</div>
-          </article>
-        ))}
+        {packages.map((p) => <PackageCard pkg={p} />)}
       </div>
     </section>
   )}

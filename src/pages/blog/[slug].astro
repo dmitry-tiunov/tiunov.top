@@ -3,6 +3,8 @@ import Base from '../../layouts/Base.astro';
 import LeadForm from '../../components/LeadForm.astro';
 import { getCollection, render } from 'astro:content';
 import site from '../../data/site.json';
+import home from '../../data/home.json';
+import SideList from '../../components/SideList.astro';
 export async function getStaticPaths() {
   const posts = await getCollection('blog', ({ data }) => !data.draft);
   return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
@@ -11,6 +13,7 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const fmt = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 const url = new URL(`/blog/${entry.id}/`, Astro.site).href;
+const others = (await getCollection('blog', ({ data, id }) => !data.draft && id !== entry.id)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 4);
 const services = (await getCollection('services', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
 const jsonld = {
   '@context': 'https://schema.org',
@@ -23,7 +26,7 @@ const jsonld = {
       inLanguage: 'ru',
       url,
       mainEntityOfPage: url,
-      image: new URL('/og-default.png', Astro.site).href,
+      image: new URL(entry.data.cover || '/og-default.png', Astro.site).href,
       author: { '@type': 'Person', name: 'Дмитрий Тиунов', url: new URL('/obo-mne/', Astro.site).href },
       publisher: { '@type': 'ProfessionalService', name: site.name, url: Astro.site?.href },
     },
@@ -38,13 +41,24 @@ const jsonld = {
   ],
 };
 ---
-<Base title={`${entry.data.title} | Тиунов / студия`} description={entry.data.description} jsonld={jsonld}>
+<Base title={`${entry.data.title} | Тиунов / студия`} description={entry.data.description} image={entry.data.cover} jsonld={jsonld}>
 <div class="wrap">
   <div class="crumbs label"><a href="/blog/">Блог</a> / {fmt.format(entry.data.date)}</div>
-  <article class="prose" style="padding-block:32px">
+  <header class="post-head reveal">
     <h1>{entry.data.title}</h1>
-    <Content />
-  </article>
+    <p class="lead">{entry.data.description}</p>
+    <div class="byline"><img src={home.about.photo} alt="" width="36" height="36" /><span>Дмитрий Тиунов · {fmt.format(entry.data.date)}</span></div>
+  </header>
+  <div class="read-grid">
+    <aside class="side">
+      <SideList title="Ещё статьи" items={others.map((o) => ({ href: `/blog/${o.id}/`, title: o.data.title, image: o.data.cover }))} />
+      <SideList title="Услуги" items={services.map((sv) => ({ href: `/uslugi/${sv.id}/`, title: sv.data.name, image: sv.data.cover, note: sv.data.priceText }))} />
+    </aside>
+    <article class="prose">
+      {entry.data.cover && <img class="post-cover" src={entry.data.cover} alt="" />}
+      <Content />
+    </article>
+  </div>
   {services.length > 0 && (
     <section aria-labelledby="uslugi-h">
       <div class="intro reveal"><span class="pill">Услуги</span><h2 id="uslugi-h">Чем можем помочь</h2></div>

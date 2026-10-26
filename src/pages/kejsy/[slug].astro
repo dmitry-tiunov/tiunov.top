@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import LeadForm from '../../components/LeadForm.astro';
 import { getCollection, render } from 'astro:content';
 import { imageSize } from '../../lib/imageSize';
+import SideList from '../../components/SideList.astro';
 export async function getStaticPaths() {
   const items = await getCollection('cases', ({ data }) => !data.draft);
   return items.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
@@ -23,6 +24,11 @@ for (let i = 0; i < items.length; i++) {
   else rows.push([items[i]]);
 }
 const coverSize = entry.data.cover ? imageSize(entry.data.cover) : null;
+// Соседние кейсы в том же порядке, что в каталоге; «следующий» — по кругу
+const all = (await getCollection('cases', ({ data }) => !data.draft)).sort((a, b) => a.data.order - b.data.order);
+const idx = all.findIndex((c) => c.id === entry.id);
+const next = all[(idx + 1) % all.length];
+const others = [...all.slice(idx + 1), ...all.slice(0, idx)].slice(0, 5);
 ---
 <Base title={entry.data.title} description={entry.data.description} image={entry.data.cover}>
 <div class="wrap">
@@ -33,9 +39,14 @@ const coverSize = entry.data.cover ? imageSize(entry.data.cover) : null;
     <p style="margin-top:20px;color:var(--muted);font-size:19px;line-height:1.4">{entry.data.summary}</p>
   </div>
   {entry.data.cover && <img class="case-hero reveal" src={entry.data.cover} alt={entry.data.client} width={coverSize?.w} height={coverSize?.h} />}
-  <article class="prose" style="padding-block:48px">
-    <Content />
-  </article>
+  <div class="read-grid" style="padding-block:48px">
+    <aside class="side">
+      <SideList title="Другие кейсы" items={others.map((c) => ({ href: `/kejsy/${c.id}/`, title: c.data.client, image: c.data.cover, note: c.data.tags.slice(0, 2).join(' · ') }))} />
+    </aside>
+    <article class="prose">
+      <Content />
+    </article>
+  </div>
   {rows.length > 0 && (
     <div class="gallery">
       {rows.map((row) => (
@@ -44,6 +55,12 @@ const coverSize = entry.data.cover ? imageSize(entry.data.cover) : null;
         </div>
       ))}
     </div>
+  )}
+  {next && next.id !== entry.id && (
+    <a class="next-case reveal" href={`/kejsy/${next.id}/`}>
+      <span class="label">Следующий проект</span>
+      <b>{next.data.client} →</b>
+    </a>
   )}
   <section><LeadForm /></section>
 </div>

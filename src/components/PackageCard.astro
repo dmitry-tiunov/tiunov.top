@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro';
+import site from '../data/site.json';
+interface Props { pkg: (typeof site.packages)[number] }
+const { pkg } = Astro.props;
+// В метке пакета после «·» стоит пометка для выделенного («чаще всего выбирают»), её показываем отдельной плашкой
+const [label] = pkg.label.split(' · ');
+---
+<article class:list={['pkg', 'reveal', { main: pkg.featured }]}>
+  <div class="pkg-top">
+    <span class="pkg-label">{label}</span>
+    {pkg.featured && <span class="pkg-pop">Чаще всего выбирают</span>}
+  </div>
+  <h3>{pkg.title}</h3>
+  <div class="price">{pkg.price} <small>₽</small></div>
+  <div class="pkg-term"><Icon name="clock" />{pkg.term}</div>
+  <a class:list={['btn', pkg.featured ? 'primary' : 'ghost']} href="#zayavka">Обсудить пакет</a>
+  <ul>{pkg.items.map((i) => <li><Icon name="check" />{i}</li>)}</ul>
+</article>

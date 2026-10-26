@@ -9,7 +9,7 @@ const seo = {
 
 const blog = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({ ...seo, date: z.coerce.date() }),
+  schema: z.object({ ...seo, date: z.coerce.date(), cover: z.string().optional() }),
 });
 
 const cases = defineCollection({

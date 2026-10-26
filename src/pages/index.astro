@@ -99,34 +99,45 @@ const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', ');
     <h2 id="uslugi-h">{home.services.title}</h2>
     <p>{home.services.text}</p>
   </div>
-  {home.services.items.map((f) => (
-    <div class="feature">
-      <div class="copy reveal">
-        <span class="label">{f.label}</span>
-        <h3 style="margin-top:12px">{f.title}</h3>
-        <p>{f.text}</p>
-        {f.bullets?.length > 0 && <ul>{f.bullets.map((b) => <li>{b}</li>)}</ul>}
-        {f.linkText && <a class="link-arrow" href={f.linkUrl}>{f.linkText}</a>}
-      </div>
-      {f.browser ? (
-        <div class="shot reveal">
-          <div class="browser" aria-hidden="true">
-            <div class="chrome"><i></i><i></i><i></i><span>yourcompany.ru</span></div>
-            <div class="page">
-              <div class="bars"><span></span><span></span><span></span><span></span></div>
-              <b>{f.browserTitle}</b>
-              <div class="row">{f.images.slice(0, 3).map((src) => <div style={`background-image:url(${src})`}></div>)}</div>
+  <div class="do-grid">
+    {home.services.items.map((f) => (
+      <a class:list={['do-card', 'reveal', `do-${f.kind}`, { wide: f.kind === 'identity' }]} href={f.linkUrl || '/uslugi/'}>
+        <div class="do-vis" aria-hidden="true">
+          {f.kind === 'identity' && (
+            <div class="flow">
+              <div class="st"><div class="tile mark"><img src={f.logo} alt="" /></div><span>Знак</span></div>
+              <i class="arr"></i>
+              <div class="st"><div class="tile pal">{f.colors?.map((c) => <b style={`background:${c}`}></b>)}<em>Аа</em></div><span>Цвета и шрифт</span></div>
+              <i class="arr"></i>
+              <div class="st"><div class="tile fan">{f.images.slice(0, 3).map((src) => <img src={src} alt="" loading="lazy" />)}</div><span>Все носители</span></div>
             </div>
-          </div>
+          )}
+          {f.kind === 'site' && (
+            <div class="browser">
+              <div class="chrome"><i></i><i></i><i></i><span>yourcompany.ru</span></div>
+              <div class="viewport"><div class="page scroll">
+                <div class="bars"><span></span><span></span><span></span><span></span></div>
+                <b>{f.browserTitle}</b>
+                <div class="row">{f.images.slice(0, 3).map((src) => <div style={`background-image:url(${src})`}></div>)}</div>
+                <div class="bars"><span></span><span></span></div>
+                <div class="row two">{f.images.slice(1, 4).slice(0, 2).map((src) => <div style={`background-image:url(${src})`}></div>)}</div>
+              </div></div>
+            </div>
+          )}
+          {f.kind === 'merch' && (
+            <div class="deck">{f.images.slice(0, 3).map((src) => <img src={src} alt="" loading="lazy" />)}</div>
+          )}
         </div>
-      ) : (
-        <div class:list={['shot', 'reveal', { duo: f.images.length > 1 }]}>
-          {f.images.slice(0, 2).map((src) => <img src={src} alt={`${f.label}: ${alt(src)}`} loading="lazy" />)}
+        <div class="do-copy">
+          <span class="label">{f.label}</span>
+          <h3>{f.title}</h3>
+          <p>{f.text}</p>
+          {f.linkText && <span class="link-arrow">{f.linkText}</span>}
         </div>
-      )}
-    </div>
-  ))}
-  <div class="center"><a class="btn ghost" href="/uslugi/">Все услуги и цены</a></div>
+      </a>
+    ))}
+  </div>
+  <div class="center"><a class="btn primary" href="/uslugi/">Все услуги и цены</a></div>
 </section>
 
 <section aria-labelledby="pochemu-h">
