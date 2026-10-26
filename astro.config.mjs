@@ -5,5 +5,6 @@ export default defineConfig({
   site: 'https://tiunov.top',
   trailingSlash: 'always',
   build: { format: 'directory' },
-  integrations: [sitemap({ filter: (page) => !page.includes('/admin/') })],
+  // В sitemap только индексируемые страницы: «Политика» закрыта noindex
+  integrations: [sitemap({ filter: (page) => !page.includes('/admin/') && !page.includes('/privacy/') })],
 });
