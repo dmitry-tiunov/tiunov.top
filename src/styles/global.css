@@ -6,10 +6,10 @@
 :root{
   color-scheme:dark;
   --primary:#ffffff; --on-primary:#000000; --accent:#0099ff;
-  --ink:#ffffff; --muted:#999999; --dim:#666666;
+  --ink:#ffffff; --muted:rgba(255,255,255,.62); --dim:rgba(255,255,255,.46);
   --canvas:#000000; --surface-1:#0f0f0f; --surface-2:#171717; --surface-3:#1f1f1f;
   --hairline:#222222; --hairline-soft:#161616;
-  --text:#d6d6d6; --edge:rgba(255,255,255,.04); --edge-2:rgba(255,255,255,.06); --edge-3:rgba(255,255,255,.12);
+  --text:rgba(255,255,255,.84); --edge:rgba(255,255,255,.04); --edge-2:rgba(255,255,255,.06); --edge-3:rgba(255,255,255,.12);
   --header-bg:rgba(0,0,0,.7); --shadow:rgba(0,0,0,.6); --chrome:#333333; --page-grad:#0b0b0b; --bar-strong:#ffffff;
   --logo-filter:none;
   --card-edge:inset 0 1px 20px rgba(255,255,255,.07),inset 0 0 0 1px rgba(255,255,255,.03);
@@ -27,10 +27,10 @@
 :root[data-theme="light"]{
   color-scheme:light;
   --primary:#111111; --on-primary:#ffffff; --accent:#0a66d8;
-  --ink:#111111; --muted:#5c5c5c; --dim:#737373;
+  --ink:#111111; --muted:rgba(0,0,0,.64); --dim:rgba(0,0,0,.55);
   --canvas:#ffffff; --surface-1:#f3f3f3; --surface-2:#e8e8e8; --surface-3:#dedede;
   --hairline:#d4d4d4; --hairline-soft:#e8e8e8;
-  --text:#333333; --edge:rgba(0,0,0,.05); --edge-2:rgba(0,0,0,.08); --edge-3:rgba(0,0,0,.12);
+  --text:rgba(0,0,0,.8); --edge:rgba(0,0,0,.05); --edge-2:rgba(0,0,0,.08); --edge-3:rgba(0,0,0,.12);
   --header-bg:rgba(255,255,255,.78); --shadow:rgba(0,0,0,.12); --chrome:#c4c4c4; --page-grad:#f7f7f7; --bar-strong:#111111;
   --logo-filter:invert(1);
   --card-edge:inset 0 0 0 1px rgba(0,0,0,.06),0 1px 3px rgba(0,0,0,.05);

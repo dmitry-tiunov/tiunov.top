@@ -24,7 +24,8 @@ const links = [
 ].filter(Boolean) as { href: string; text: string; primary?: boolean; download?: boolean }[];
 const stepIcons = ['search', 'contract', 'layers', 'pen', 'send'] as const;
 // Заголовок первого экрана в две строки: после запятой — серым
-const [titleHead, titleTail] = (() => { const i = home.hero.title.indexOf(', '); return i < 0 ? [home.hero.title, ''] : [home.hero.title.slice(0, i + 1), home.hero.title.slice(i + 2)]; })();
+// Вторая часть заголовка приглушена: после первой запятой, а без запятой — с первого «и»
+const [titleHead, titleTail] = (() => { const t = home.hero.title; const i = t.indexOf(', '); if (i >= 0) return [t.slice(0, i + 1), t.slice(i + 2)]; const j = t.indexOf(' и '); return j < 0 ? [t, ''] : [t.slice(0, j), t.slice(j + 1)]; })();
 ---
 <Base title={home.seoTitle} description={home.seoDescription}>
 <main>
