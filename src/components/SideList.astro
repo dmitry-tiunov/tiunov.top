@@ -10,7 +10,7 @@ const { title, items } = Astro.props;
     <div class="label">{title}</div>
     {items.map((i) => (
       <a href={i.href}>
-        {i.image ? <img src={thumb(i.image)} alt="" loading="lazy" /> : <span class="ph"></span>}
+        {i.image ? <img src={thumb(i.image)} alt={i.title} loading="lazy" /> : <span class="ph"></span>}
         <span><b>{i.title}</b>{i.note && <small>{i.note}</small>}</span>
       </a>
     ))}

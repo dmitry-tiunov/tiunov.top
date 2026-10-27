@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 import { sortCases } from '../../lib/sortCases';
 const cases = sortCases(await getCollection('cases', ({ data }) => !data.draft));
 ---
-<Base title="Кейсы: фирменный стиль, логотипы, носители | Тиунов / студия" description="Проекты студии: логотипы, фирменные стили, оформление транспорта, мерч и сайты.">
+<Base title="Кейсы: фирменный стиль, логотипы, носители | Тиунов / студия" description="Кейсы студии Тиунов: логотипы, фирменные стили, брендбуки, оформление транспорта, мерч и сайты для компаний из разных городов России.">
 <div class="wrap">
   <section style="padding-top:72px">
     <div class="intro"><span class="pill">Портфолио</span><h1 style="margin-top:20px;font-size:clamp(46px,8vw,96px)">Кейсы</h1><p>Логотипы, фирменные стили, транспорт, мерч и сайты.</p></div>
