@@ -55,7 +55,7 @@ const jsonld = {
       <SideList title="Услуги" items={services.map((sv) => ({ href: `/uslugi/${sv.id}/`, title: sv.data.name, image: sv.data.cover, note: sv.data.priceText }))} />
     </aside>
     <article class="prose">
-      {entry.data.cover && <img class="post-cover" src={entry.data.cover} alt="" />}
+      {entry.data.cover && <img class="post-cover" src={entry.data.cover} alt={entry.data.title} />}
       <Content />
     </article>
   </div>

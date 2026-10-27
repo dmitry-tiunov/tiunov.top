@@ -5,7 +5,7 @@ import { thumb } from '../../lib/thumb';
 const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 const fmt = new Intl.DateTimeFormat('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
-<Base title="Блог о брендинге и сайтах | Тиунов / студия" description="Статьи о фирменном стиле, сайтах и рекламе для бизнеса: цены, сроки, как выбрать подрядчика.">
+<Base title="Блог о брендинге и сайтах | Тиунов / студия" description="Статьи о логотипе, фирменном стиле и сайтах для бизнеса: этапы работы, бриф, состав фирменного стиля, цены и сроки разработки.">
 <div class="wrap">
   <section>
     <div class="intro reveal"><span class="pill">Блог</span><h1 style="margin-top:20px;font-size:clamp(40px,6vw,76px)">Блог о дизайне для бизнеса</h1><p>Как устроены логотип, фирменный стиль и сайт и как к ним подготовиться.</p></div>
